@@ -3,337 +3,878 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Latta · Dashboard Q1 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Latta · Dashboard 2026</title>
 <style>
-:root {
-  --red:    #C8102E;
-  --red2:   #e01530;
-  --red-d:  rgba(200,16,46,0.08);
-  --ink:    #1a1614;
-  --ink2:   #3a3430;
-  --ink3:   #7a6e64;
-  --ink4:   #b0a898;
-  --line:   #e8e2d8;
-  --bg:     #ffffff;
-  --bg2:    #faf8f5;
-  --green:  #3a8a3a;
-  --green-d:rgba(58,138,58,0.08);
-  --amber:  #9a6c10;
-  --amber-d:rgba(154,108,16,0.08);
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #eeeae4;
+  color: #1a1a1a;
+  font-size: 14px;
+  line-height: 1.5;
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;font-size:13px;line-height:1.5;}
 
-/* HEADER */
-header{background:var(--ink);padding:0 36px;height:56px;display:flex;align-items:center;justify-content:space-between;}
-.h-logo{font-family:'Oswald',sans-serif;font-weight:600;font-size:20px;letter-spacing:5px;color:#fff;}
-.h-logo em{color:var(--red);font-style:normal;}
-.h-meta{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--ink4);text-transform:uppercase;text-align:right;}
-.h-meta strong{color:#fff;display:block;margin-bottom:2px;font-size:10px;}
+/* ── HEADER ── */
+header {
+  background: #1e2d45;
+  padding: 0 28px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.h-brand { display: flex; align-items: center; gap: 12px; }
+.h-name  { font-size: 15px; font-weight: 700; color: #fff; letter-spacing: 0.3px; }
+.h-name em { color: #e03040; font-style: normal; }
+.h-subtitle { font-size: 13px; color: #8aa0bc; }
+.h-logout { font-size: 13px; color: #8aa0bc; cursor: pointer; }
+.h-logout:hover { color: #fff; }
 
-/* MAIN */
-main{max-width:1200px;margin:0 auto;padding:32px 36px 56px;}
+/* ── TOOLBAR ── */
+.toolbar {
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  padding: 10px 28px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.toolbar span { font-size: 13px; color: #555; }
+.toolbar select {
+  font-size: 13px;
+  color: #1a1a1a;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
 
-/* SECTION */
-.s{margin-top:40px;}
-.s:first-child{margin-top:0;}
-.s-title{font-family:'Oswald',sans-serif;font-weight:400;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--ink3);border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
-.s-title::before{content:'';display:block;width:3px;height:14px;background:var(--red);border-radius:1px;flex-shrink:0;}
+/* ── TABS ── */
+.tabs {
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  padding: 0 28px;
+  display: flex;
+}
+.tab {
+  font-size: 13px;
+  font-weight: 500;
+  color: #666;
+  padding: 12px 18px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+.tab:hover { color: #1a1a1a; }
+.tab.active { color: #1e2d45; border-bottom-color: #1e2d45; font-weight: 600; }
 
-/* KPI */
-.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
-.kpi{background:var(--bg);padding:22px 20px 18px;}
-.kpi-tag{font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;margin-bottom:10px;}
-.kpi-val{font-family:'Oswald',sans-serif;font-weight:500;font-size:40px;line-height:1;letter-spacing:-1px;margin-bottom:8px;}
-.kpi-val.r{color:var(--red);}
-.kpi-val.g{color:var(--green);}
-.kpi-val.a{color:var(--amber);}
-.kpi-d{font-family:'IBM Plex Mono',monospace;font-size:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
-.up{color:var(--green);}
-.dn{color:var(--red2);}
-.ref{color:var(--ink4);}
+/* ── MAIN ── */
+main {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 24px 28px 60px;
+}
 
-/* TWO COL */
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
-.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;}
+/* ── PAGE ── */
+.page { display: none; }
+.page.active { display: block; }
 
-/* CARD */
-.card{background:var(--bg2);border:1px solid var(--line);padding:22px;}
-.card-title{font-family:'Oswald',sans-serif;font-weight:500;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--ink);margin-bottom:2px;}
-.card-sub{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--ink3);text-transform:uppercase;margin-bottom:16px;}
+/* ── SECTION TITLE ── */
+.section-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #888;
+  margin: 28px 0 12px;
+}
+.section-title:first-child { margin-top: 0; }
 
-/* MONTHLY TABLE */
-.mtable{width:100%;border-collapse:collapse;}
-.mtable th{font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;text-align:left;padding:0 0 8px;border-bottom:1px solid var(--line);}
-.mtable th:not(:first-child){text-align:right;}
-.mtable td{padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.04);vertical-align:middle;}
-.mtable td:not(:first-child){text-align:right;font-family:'IBM Plex Mono',monospace;font-size:11px;}
-.yr-label{font-family:'Oswald',sans-serif;font-weight:400;font-size:15px;letter-spacing:1px;color:var(--ink2);}
-.yr-label.cur{color:var(--red);}
-.mval{display:flex;align-items:center;justify-content:flex-end;gap:8px;}
-.mbar-bg{width:50px;height:3px;background:var(--line);border-radius:1px;overflow:hidden;}
-.mbar-fill{height:100%;border-radius:1px;}
+/* ── KPI ROW ── */
+.kpi-row {
+  display: grid;
+  gap: 14px;
+}
+.kpi-row.cols4 { grid-template-columns: repeat(4, 1fr); }
+.kpi-row.cols3 { grid-template-columns: repeat(3, 1fr); }
+.kpi-row.cols2 { grid-template-columns: repeat(2, 1fr); }
 
-/* CAT TABLE */
-.ctable{width:100%;border-collapse:collapse;}
-.ctable th{font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:2px;color:var(--ink3);text-transform:uppercase;text-align:left;padding:0 0 8px;border-bottom:1px solid var(--line);}
-.ctable th:not(:first-child){text-align:right;}
-.ctable td{padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.04);vertical-align:middle;}
-.ctable td:not(:first-child){text-align:right;font-family:'IBM Plex Mono',monospace;font-size:11px;}
-.cname{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:500;}
-.cdot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
-.brow{display:flex;align-items:center;gap:8px;justify-content:flex-end;}
-.bg{width:64px;height:3px;background:var(--line);border-radius:1px;overflow:hidden;}
-.bf{height:100%;border-radius:1px;}
-.badge{font-family:'IBM Plex Mono',monospace;font-size:9px;padding:2px 6px;border-radius:2px;display:inline-block;}
-.bp{background:var(--green-d);color:var(--green);}
-.bn{background:var(--red-d);color:var(--red2);}
-.ba{background:var(--amber-d);color:var(--amber);}
+/* ── KPI CARD ── */
+.kpi-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 18px 20px 16px;
+  border-left: 4px solid #ccc;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.kpi-card.blue   { border-left-color: #2563eb; }
+.kpi-card.green  { border-left-color: #16a34a; }
+.kpi-card.red    { border-left-color: #dc2626; }
+.kpi-card.orange { border-left-color: #ea580c; }
+.kpi-card.purple { border-left-color: #7c3aed; }
+.kpi-card.teal   { border-left-color: #0891b2; }
 
-/* PROD LIST */
-.prow{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(0,0,0,0.04);}
-.pnum{font-family:'Oswald',sans-serif;font-weight:300;font-size:20px;color:var(--line);width:22px;flex-shrink:0;line-height:1;}
-.pinfo{flex:1;min-width:0;}
-.pname{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.pcat{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--ink3);letter-spacing:1px;text-transform:uppercase;margin-top:1px;}
-.pbar{width:60px;flex-shrink:0;}
-.pbarnum{text-align:right;font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--ink4);}
-.pbarbg{height:3px;background:var(--line);border-radius:1px;overflow:hidden;margin-top:3px;}
-.pbarfill{height:100%;border-radius:1px;background:var(--red);}
-.prev{font-family:'IBM Plex Mono',monospace;font-size:11px;width:54px;text-align:right;flex-shrink:0;}
+.kpi-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 6px;
+}
+.kpi-value {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #1a1a1a;
+  margin-bottom: 5px;
+}
+.kpi-sub {
+  font-size: 12px;
+  color: #888;
+}
+.kpi-sub .up   { color: #16a34a; font-weight: 600; }
+.kpi-sub .down { color: #dc2626; font-weight: 600; }
 
-/* COST LIST */
-.crow{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(0,0,0,0.04);}
-.ccat{flex:1;font-size:12px;display:flex;align-items:center;gap:8px;}
-.cbar{width:60px;flex-shrink:0;}
-.cbarbg{height:3px;background:var(--line);border-radius:1px;overflow:hidden;}
-.cbarfill{height:100%;border-radius:1px;}
-.cpct{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--ink3);width:30px;text-align:right;flex-shrink:0;}
-.camt{font-family:'IBM Plex Mono',monospace;font-size:11px;width:60px;text-align:right;flex-shrink:0;}
+/* ── GRID LAYOUTS ── */
+.grid2  { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+.grid13 { display: grid; grid-template-columns: 1.5fr 1fr; gap: 14px; margin-top: 14px; }
 
-/* FOOTER */
-footer{border-top:1px solid var(--line);padding:18px 36px;display:flex;justify-content:space-between;align-items:center;background:var(--bg2);}
-.fl{font-family:'Oswald',sans-serif;font-weight:300;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);}
-.fl span{color:var(--red);}
-.fr{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--ink4);text-transform:uppercase;}
+/* ── CARD ── */
+.card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 2px;
+}
+.card-sub {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 16px;
+}
 
-@media(max-width:900px){.kpi-row{grid-template-columns:1fr 1fr;}.g2,.g3{grid-template-columns:1fr;}}
-@media(max-width:580px){main{padding:16px;}header{padding:0 16px;}.kpi-row{grid-template-columns:1fr 1fr;}}
+/* ── TABLE ── */
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #999;
+  text-align: left;
+  padding: 0 8px 8px 0;
+  border-bottom: 1px solid #eee;
+}
+thead th:not(:first-child) { text-align: right; }
+tbody td {
+  padding: 8px 8px 8px 0;
+  font-size: 13px;
+  border-bottom: 1px solid #f5f5f5;
+  vertical-align: middle;
+}
+tbody td:not(:first-child) { text-align: right; font-size: 13px; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr.total td { font-weight: 700; border-top: 1px solid #eee; border-bottom: none; }
+
+/* ── INLINE BAR ── */
+.bar-cell { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+.bar-track { width: 70px; height: 5px; background: #eee; border-radius: 3px; overflow: hidden; flex-shrink: 0; }
+.bar-fill  { height: 100%; border-radius: 3px; }
+
+/* ── BADGE ── */
+.badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+.badge.pos  { background: #dcfce7; color: #16a34a; }
+.badge.neg  { background: #fee2e2; color: #dc2626; }
+.badge.neu  { background: #fef9c3; color: #92400e; }
+.badge.new  { background: #dbeafe; color: #1d4ed8; }
+
+/* ── MONTH TABLE ── */
+.month-table th { font-size: 11px; }
+.month-table td { font-size: 12px; }
+.month-table .yr-cell { font-weight: 700; font-size: 13px; }
+.month-table .yr-cell.cur { color: #dc2626; }
+
+/* ── PRODUCT ROW ── */
+.prod-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+.prod-row:last-child { border-bottom: none; }
+.prod-num { font-size: 16px; font-weight: 700; color: #ddd; width: 22px; flex-shrink: 0; }
+.prod-info { flex: 1; min-width: 0; }
+.prod-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.prod-cat  { font-size: 11px; color: #999; margin-top: 1px; }
+.prod-bars { width: 90px; flex-shrink: 0; }
+.prod-bar-row { display: flex; align-items: center; gap: 4px; margin-bottom: 2px; }
+.prod-bar-bg  { flex: 1; height: 4px; background: #eee; border-radius: 2px; overflow: hidden; }
+.prod-bar-f   { height: 100%; border-radius: 2px; }
+.prod-bar-lbl { font-size: 10px; color: #bbb; width: 26px; text-align: right; flex-shrink: 0; }
+.prod-rev26   { font-size: 13px; font-weight: 600; width: 56px; text-align: right; flex-shrink: 0; }
+.prod-rev25   { font-size: 11px; color: #aaa; width: 56px; text-align: right; flex-shrink: 0; }
+.prod-delta   { width: 60px; text-align: right; flex-shrink: 0; }
+
+/* ── COST ROW ── */
+.cost-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+.cost-row:last-child { border-bottom: none; }
+.cost-name { flex: 1; font-size: 13px; }
+.cost-sub  { font-size: 11px; color: #aaa; }
+.cost-bar  { width: 80px; flex-shrink: 0; }
+.cost-bg   { height: 5px; background: #eee; border-radius: 3px; overflow: hidden; }
+.cost-f    { height: 100%; border-radius: 3px; }
+.cost-pct  { font-size: 12px; color: #888; width: 32px; text-align: right; flex-shrink: 0; }
+.cost-amt  { font-size: 13px; font-weight: 600; width: 64px; text-align: right; flex-shrink: 0; }
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid #ddd;
+  padding: 14px 28px;
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #aaa;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 960px) {
+  .kpi-row.cols4 { grid-template-columns: 1fr 1fr; }
+  .grid2, .grid13 { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  main { padding: 16px; }
+  header, .toolbar, .tabs { padding-left: 16px; padding-right: 16px; }
+  .kpi-row.cols4, .kpi-row.cols3 { grid-template-columns: 1fr 1fr; }
+}
 </style>
 </head>
 <body>
+
 <script>
 (function(){
-  const PWD="Redondo26",key="latta_auth";
+  const PWD="Redondo26", key="latta_auth";
   if(sessionStorage.getItem(key)!=="ok"){
     const i=prompt("Password:");
-    if(i!==PWD){document.body.innerHTML="<div style='font-family:monospace;color:#C8102E;padding:40px'>Accesso negato.</div>";throw new Error();}
+    if(i!==PWD){ document.body.innerHTML="<div style='padding:60px;font-size:14px;color:#dc2626'>Accesso negato.</div>"; throw new Error(); }
     sessionStorage.setItem(key,"ok");
   }
 })();
 </script>
 
+<!-- HEADER -->
 <header>
-  <div class="h-logo">L<em>A</em>TT<em>A</em></div>
-  <div class="h-meta"><strong>Q1 2026 — Gen / Mar</strong>Bollefuturibili S.r.l.</div>
+  <div class="h-brand">
+    <div class="h-name">L<em>A</em>TT<em>A</em></div>
+    <div class="h-subtitle">Dashboard Operativa 2023–2026</div>
+  </div>
+  <div class="h-logout">Bollefuturibili S.r.l.</div>
 </header>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <span>Anno:</span>
+  <select id="selAnno">
+    <option value="2026" selected>2026</option>
+    <option value="2025">2025</option>
+    <option value="2024">2024</option>
+    <option value="2023">2023</option>
+  </select>
+  <span>Vista:</span>
+  <select id="selVista">
+    <option value="q1" selected>Q1 (Gen–Mar)</option>
+    <option value="full">Anno completo</option>
+  </select>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" data-tab="incassi">📊 Incassi</div>
+  <div class="tab" data-tab="prodotti">🍔 Prodotti Q1</div>
+  <div class="tab" data-tab="costi">💸 Costi</div>
+  <div class="tab" data-tab="budget">📈 Budget 2026</div>
+</div>
 
 <main>
 
-<!-- ── KPI ── -->
-<div class="s">
-  <div class="s-title">KPI Principali — Q1 2026</div>
-  <div class="kpi-row">
-    <div class="kpi">
-      <div class="kpi-tag">Ricavi Q1 2026</div>
-      <div class="kpi-val">€163K</div>
-      <div class="kpi-d"><span class="up">▲ +18.2%</span><span class="ref">vs Q1 2025 · €138K</span></div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-tag">Costi Q1 2026</div>
-      <div class="kpi-val a">€75K</div>
-      <div class="kpi-d"><span class="ref">Cost / Rev</span><span style="color:var(--amber)">45.7%</span></div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-tag">Ticket Medio / Ospite</div>
-      <div class="kpi-val g">€21.4</div>
-      <div class="kpi-d"><span class="up">▲ +21.7%</span><span class="ref">vs 2025 · €17.6</span></div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-tag">Ospiti Medi / Giorno</div>
-      <div class="kpi-val">94</div>
-      <div class="kpi-d"><span class="up">▲ +20.5%</span><span class="ref">vs 2025 · 78 / gg</span></div>
-    </div>
-  </div>
-</div>
+<!-- ═══════════════════════════ TAB INCASSI ═══════════════════════════ -->
+<div class="page active" id="page-incassi">
 
-<!-- ── RICAVI MENSILI ── -->
-<div class="s">
-  <div class="s-title">Ricavi Mensili — Confronto Anni</div>
+  <div class="section-title">Incassi — Q1 2026 vs Q1 2025</div>
+  <div class="kpi-row cols4" id="kpi-incassi"></div>
+
+  <div class="section-title">Andamento mensile per anno</div>
   <div class="card">
-    <div class="card-title">Andamento per Mese</div>
-    <div class="card-sub">€K · Barra proporzionale al valore massimo storico (Mar 2026 = €77K)</div>
-    <table class="mtable" id="monthlyTable"></table>
-  </div>
-</div>
-
-<!-- ── CATEGORIE + PRODOTTI ── -->
-<div class="s">
-  <div class="s-title">Mix Vendite &amp; Top Prodotti — Q1 2026</div>
-  <div class="g2">
-    <div class="card">
-      <div class="card-title">Categorie</div>
-      <div class="card-sub">Ricavi Q1 2026 · Var YoY</div>
-      <table class="ctable" id="catTable"></table>
-    </div>
-    <div class="card">
-      <div class="card-title">Top 10 Prodotti</div>
-      <div class="card-sub">Per ricavo totale · iPratico</div>
-      <div id="prodList"></div>
+    <div class="card-title">Incasso mensile — tutti gli anni</div>
+    <div class="card-sub">€ effettivi (DGFE + fatture fiscalizzate + preconti)</div>
+    <div style="overflow-x:auto">
+      <table class="month-table" id="tbl-monthly"></table>
     </div>
   </div>
+
+  <div class="grid2">
+    <div class="card" style="margin-top:0">
+      <div class="card-title">Weekend vs Giorni Feriali</div>
+      <div class="card-sub">Media giornaliera e incidenza per anno</div>
+      <table id="tbl-weekend"></table>
+    </div>
+    <div class="card" style="margin-top:0">
+      <div class="card-title">Media per giorno della settimana (€)</div>
+      <div class="card-sub">Incasso medio giornaliero storico</div>
+      <table id="tbl-dowk"></table>
+    </div>
+  </div>
+
 </div>
 
-<!-- ── COSTI ── -->
-<div class="s">
-  <div class="s-title">Costi per Centro — Q1 2026</div>
+<!-- ═══════════════════════════ TAB PRODOTTI ═══════════════════════════ -->
+<div class="page" id="page-prodotti">
+
+  <div class="section-title">Categorie — Q1 2025 vs Q1 2026</div>
   <div class="card">
-    <div class="card-title">Breakdown Costi</div>
-    <div class="card-sub">Imponibile · Fatture in Cloud · Totale €75K</div>
-    <div id="costList"></div>
+    <div class="card-title">Vendite per categoria</div>
+    <div class="card-sub">Quantità · Ricavi · Mix percentuale · Variazione anno su anno</div>
+    <table id="tbl-cat"></table>
   </div>
+
+  <div class="section-title">Top prodotti — Q1 2025 vs Q1 2026</div>
+  <div class="card">
+    <div class="card-title">Top 15 prodotti per ricavo Q1 2026</div>
+    <div class="card-sub">
+      <span style="display:inline-flex;align-items:center;gap:4px;margin-right:12px">
+        <span style="display:inline-block;width:10px;height:4px;background:#1e2d45;border-radius:2px"></span> 2026
+      </span>
+      <span style="display:inline-flex;align-items:center;gap:4px">
+        <span style="display:inline-block;width:10px;height:4px;background:#ccc;border-radius:2px"></span> 2025
+      </span>
+    </div>
+    <div id="prod-list"></div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════ TAB COSTI ═══════════════════════════ -->
+<div class="page" id="page-costi">
+
+  <div class="section-title">Costi — Q1 2026 (YTD al 08/04)</div>
+  <div class="kpi-row cols3" id="kpi-costi"></div>
+
+  <div class="grid13">
+    <div class="card">
+      <div class="card-title">Costi per centro di costo</div>
+      <div class="card-sub">Imponibile mensile Gen / Feb / Mar + totale YTD</div>
+      <table id="tbl-cdc"></table>
+    </div>
+    <div class="card">
+      <div class="card-title">Principali voci di costo</div>
+      <div class="card-sub">Dettaglio categorie Q1 2026</div>
+      <div id="cost-detail"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════ TAB BUDGET ═══════════════════════════ -->
+<div class="page" id="page-budget">
+
+  <div class="section-title">Budget 2026</div>
+  <div class="kpi-row cols2" id="kpi-budget"></div>
+
+  <div class="section-title">Effettivo vs Budget — mensile</div>
+  <div class="card">
+    <div class="card-title">Confronto effettivo / budget / 2025</div>
+    <div class="card-sub">Tasso crescita applicato: +5.8% su 2025 · Mesi senza dati = target</div>
+    <table id="tbl-budget"></table>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">Conto economico proiettato 2026</div>
+      <div class="card-sub">Budget ricavi vs costi Q1×4 — ante lavoro e ammortamenti</div>
+      <table id="tbl-pl"></table>
+    </div>
+    <div class="card">
+      <div class="card-title">Costi annui proiettati per CDC</div>
+      <div class="card-sub">Proiezione da Q1 × 4 — aprile escluso (incompleto)</div>
+      <div id="cost-proj"></div>
+    </div>
+  </div>
+
 </div>
 
 </main>
 
 <footer>
-  <div class="fl">L<span>A</span>TT<span>A</span> · Fermenti e Miscele</div>
-  <div class="fr">iPratico + Fatture in Cloud · Apr 2026</div>
+  <span>Latta · Fermenti e Miscele — Bollefuturibili S.r.l.</span>
+  <span>Fonte: iPratico POS + Fatture in Cloud · Aggiornato Apr 2026</span>
 </footer>
 
 <script>
-/* ================================================================
-   DATA — Aggiorna questi valori per ogni nuovo periodo
-   ================================================================ */
-const DATA = {
+/* ════════════════════════════════════════
+   DATA
+════════════════════════════════════════ */
+const D = {
   monthly: {
-    2023: {1:54439,2:49463,3:57988,4:60170,5:69669,6:52408,7:45569,8:17526,9:40986,10:58476,11:40413,12:38598},
-    2024: {1:38730,2:43689,3:65019,4:64440,5:63404,6:53287,7:36006,8:13894,9:39034,10:62831,11:48755,12:48477},
-    2025: {1:31386,2:32165,3:74456,4:42844,5:61921,6:41236,7:34264,8:19067,9:43150,10:47004,11:59159,12:43790},
-    2026: {1:37943,2:48010,3:77192}
+    2023: {Gen:63512,Feb:53576,Mar:61117,Apr:65812,Mag:120873,Giu:60309,Lug:51796,Ago:17862,Set:41849,Ott:82503,Nov:49856,Dic:48612},
+    2024: {Gen:41940,Feb:45444,Mar:71216,Apr:70806,Mag:69862,Giu:67834,Lug:37493,Ago:14091,Set:54528,Ott:85930,Nov:55313,Dic:81276},
+    2025: {Gen:44005,Feb:35933,Mar:111011,Apr:48492,Mag:70844,Giu:73467,Lug:36764,Ago:19743,Set:44234,Ott:56857,Nov:60448,Dic:73829},
+    2026: {Gen:38643,Feb:59193,Mar:88460}
   },
-  categories_2026: [
-    {cat:'Food',        total:72473, qty:6505},
-    {cat:'Cocktail',    total:58868, qty:6609},
-    {cat:'Spina',       total:16131, qty:2695},
-    {cat:'Vino Bottiglia', total:12735, qty:488},
-    {cat:'Altro',       total:12705, qty:1689},
-    {cat:'Vino Mescita',total:5228,  qty:867},
-    {cat:'Dessert',     total:4578,  qty:1098},
-    {cat:'Ferm. Lattina',total:1531, qty:312},
-    {cat:'Caffetteria', total:1083,  qty:444},
-    {cat:'Distillati',  total:799,   qty:121},
-    {cat:'Lattine',     total:786,   qty:119},
+  totals: { 2023:717676, 2024:695734, 2025:675628 },
+  q1:     { 2025:190949, 2026:186295 },
+  weekend: [
+    {anno:2023, feriali:281667, weekend:436009, pctWE:60.8, mediaF:1739, mediaW:2725, ratio:1.57},
+    {anno:2024, feriali:277398, weekend:418336, pctWE:60.1, mediaF:1813, mediaW:2505, ratio:1.38},
+    {anno:2025, feriali:244096, weekend:431533, pctWE:63.9, mediaF:1516, mediaW:2714, ratio:1.79},
+    {anno:2026, feriali:73293,  weekend:113002, pctWE:60.7, mediaF:1788, mediaW:2825, ratio:1.58},
   ],
-  categories_2025: {
-    'Food':43987,'Cocktail':39797,'Spina':13332,'Vino Bottiglia':6837,
-    'Altro':47855,'Vino Mescita':3452,'Dessert':3391,'Ferm. Lattina':1643,
-    'Caffetteria':1518,'Distillati':1070,'Lattine':594
-  },
-  top_products: [
-    {name:'Pastrami',         cat:'Food',     rev:9219, qty:522},
-    {name:'Latta Burger',     cat:'Food',     rev:8403, qty:536},
-    {name:'Gin Tonic',        cat:'Cocktail', rev:7843, qty:764},
-    {name:'Menu 30\u20ac',    cat:'Food',     rev:6596, qty:222},
-    {name:'Token 10',         cat:'Cocktail', rev:6157, qty:630},
-    {name:'Avocado Toast',    cat:'Food',     rev:5339, qty:366},
-    {name:'German Pils',      cat:'Spina',    rev:5231, qty:901},
-    {name:'Menu 20\u20ac',    cat:'Food',     rev:5131, qty:262},
-    {name:'Drink 15',         cat:'Cocktail', rev:4353, qty:300},
-    {name:'Affitto Location', cat:'Altro',    rev:3600, qty:2},
+  dowk: [
+    {anno:2023, lun:2605, mar:1287, mer:1301, gio:1617, ven:1804, sab:2696, dom:3575},
+    {anno:2024, lun:2731, mar:1012, mer:1962, gio:1891, ven:1711, sab:2503, dom:3120},
+    {anno:2025, lun:2245, mar:804,  mer:763,  gio:1746, ven:1618, sab:3614, dom:2986},
+    {anno:2026, lun:3315, mar:1174, mer:775,  gio:1004, ven:1021, sab:3324, dom:4269},
   ],
-  costs: [
-    {centro:'VIC Beverage',      amount:21178, color:'#5a7ca8'},
-    {centro:'Leases / Rentals',  amount:19291, color:'#9a5a7a'},
-    {centro:'VIC Food',          amount:18174, color:'#3a8a3a'},
-    {centro:'Services',          amount:8619,  color:'#9a6c10'},
-    {centro:'Utilities',         amount:4255,  color:'#c87a2a'},
-    {centro:'Sales & Marketing', amount:1606,  color:'#5a9aaa'},
-    {centro:'Other + Lab',       amount:922,   color:'#8a8070'},
+  categories: [
+    {cat:'Food',           qty25:4725, rev25:43987, qty26:6505, rev26:72473},
+    {cat:'Cocktail',       qty25:4523, rev25:39797, qty26:6609, rev26:58868},
+    {cat:'Spina',          qty25:2325, rev25:13332, qty26:2695, rev26:16131},
+    {cat:'Vino Bottiglia', qty25:278,  rev25:6837,  qty26:488,  rev26:12735},
+    {cat:'Altro',          qty25:1775, rev25:47855, qty26:1689, rev26:12705},
+    {cat:'Vino Mescita',   qty25:568,  rev25:3452,  qty26:867,  rev26:5228},
+    {cat:'Dessert',        qty25:706,  rev25:3391,  qty26:1098, rev26:4578},
+    {cat:'Ferm. Lattina',  qty25:337,  rev25:1643,  qty26:312,  rev26:1531},
+    {cat:'Caffetteria',    qty25:646,  rev25:1518,  qty26:444,  rev26:1083},
+    {cat:'Distillati',     qty25:174,  rev25:1070,  qty26:121,  rev26:799},
+    {cat:'Lattine',        qty25:94,   rev25:594,   qty26:119,  rev26:786},
   ],
+  products: [
+    {n:1,  cat:'Food',     name:'Pastrami',        qty25:365,  rev25:6438,  qty26:522, rev26:9219},
+    {n:2,  cat:'Food',     name:'Latta Burger',     qty25:134,  rev25:2060,  qty26:536, rev26:8403},
+    {n:3,  cat:'Cocktail', name:'Gin Tonic',        qty25:496,  rev25:4951,  qty26:764, rev26:7843},
+    {n:4,  cat:'Food',     name:'Menu 30€',          qty25:null, rev25:null,  qty26:222, rev26:6596},
+    {n:5,  cat:'Cocktail', name:'Token 10',          qty25:27,   rev25:249,   qty26:630, rev26:6157},
+    {n:6,  cat:'Food',     name:'Avocado Toast',     qty25:239,  rev25:3553,  qty26:366, rev26:5339},
+    {n:7,  cat:'Spina',    name:'German Pils',       qty25:null, rev25:null,  qty26:901, rev26:5231},
+    {n:8,  cat:'Food',     name:'Menu 20€',           qty25:null, rev25:null,  qty26:262, rev26:5131},
+    {n:9,  cat:'Cocktail', name:'Drink 15',           qty25:235,  rev25:3408,  qty26:300, rev26:4353},
+    {n:10, cat:'Food',     name:'Patate al Forno',   qty25:null, rev25:null,  qty26:525, rev26:3126},
+    {n:11, cat:'Food',     name:'Hummus Carota',     qty25:null, rev25:null,  qty26:169, rev26:1666},
+    {n:12, cat:'Food',     name:'Cardoncelli',        qty25:null, rev25:null,  qty26:135, rev26:1572},
+    {n:13, cat:'Food',     name:'Alette di Pollo',   qty25:null, rev25:null,  qty26:178, rev26:1398},
+    {n:14, cat:'Cocktail', name:'Spritz Latta',       qty25:null, rev25:null,  qty26:137, rev26:1370},
+    {n:15, cat:'Food',     name:'Avocado Toast',     qty25:null, rev25:null,  qty26:98,  rev26:1350},
+  ],
+  cdc: [
+    {cdc:'VIC Beverage',    gen:8660, feb:4955, mar:7563, ytd:21178, pct:28.6, color:'#2563eb'},
+    {cdc:'Leases/Rentals',  gen:6430, feb:6430, mar:6430, ytd:19291, pct:26.1, color:'#7c3aed'},
+    {cdc:'VIC Food',        gen:5607, feb:6975, mar:5592, ytd:18174, pct:24.5, color:'#16a34a'},
+    {cdc:'Services',        gen:2584, feb:2779, mar:3257, ytd:8619,  pct:11.6, color:'#ea580c'},
+    {cdc:'Utilities',       gen:1724, feb:1037, mar:1493, ytd:4255,  pct:5.7,  color:'#0891b2'},
+    {cdc:'Sales & Mktg',    gen:202,  feb:202,  mar:1202, ytd:1606,  pct:2.2,  color:'#ca8a04'},
+    {cdc:'Other + Lab',     gen:128,  feb:794,  mar:0,    ytd:922,   pct:1.2,  color:'#888'},
+  ],
+  costDetail: [
+    {name:'Food (fornitori)',       sub:'VIC Food',       amt:13763, color:'#16a34a'},
+    {name:'Cocktail & Spirits',     sub:'VIC Beverage',   amt:8718,  color:'#2563eb'},
+    {name:'Birre',                  sub:'VIC Beverage',   amt:6770,  color:'#2563eb'},
+    {name:'Affitto immobile',       sub:'Leases/Rentals', amt:18953, color:'#7c3aed'},
+    {name:'Frutta e Verdura',       sub:'VIC Food',       amt:4411,  color:'#16a34a'},
+    {name:'Wine',                   sub:'VIC Beverage',   amt:4325,  color:'#2563eb'},
+    {name:'Pulizie',                sub:'Services',       amt:3652,  color:'#ea580c'},
+    {name:'Utenze',                 sub:'Utilities',      amt:3818,  color:'#0891b2'},
+    {name:'Manutenzione',           sub:'Services',       amt:1468,  color:'#ea580c'},
+    {name:'Ghiaccio',               sub:'VIC Beverage',   amt:1365,  color:'#2563eb'},
+  ],
+  budget: [
+    {mese:'Gen', eff25:44005,  eff26:38643,  bud26:46557},
+    {mese:'Feb', eff25:35933,  eff26:59193,  bud26:38017},
+    {mese:'Mar', eff25:111011, eff26:88460,  bud26:117450},
+    {mese:'Apr', eff25:48492,  eff26:null,   bud26:51305},
+    {mese:'Mag', eff25:70844,  eff26:null,   bud26:74953},
+    {mese:'Giu', eff25:73467,  eff26:null,   bud26:77729},
+    {mug:'Lug',  eff25:36764,  eff26:null,   bud26:38897, mese:'Lug'},
+    {mese:'Ago', eff25:19743,  eff26:null,   bud26:20888},
+    {mese:'Set', eff25:44234,  eff26:null,   bud26:46800},
+    {mese:'Ott', eff25:56857,  eff26:null,   bud26:60155},
+    {mese:'Nov', eff25:60448,  eff26:null,   bud26:63954},
+    {mese:'Dic', eff25:73829,  eff26:null,   bud26:78112},
+  ],
+  pl: {
+    ricaviBudget:714815, ricaviQ1:186295, ricaviProjQ24:528520,
+    costiTot:296178, margine:418637, marginePct:58.6,
+    voci:[
+      {label:'VIC Beverage',    amt:84712,  pct:11.9},
+      {label:'Leases/Rentals',  amt:77163,  pct:10.8},
+      {label:'VIC Food',        amt:72695,  pct:10.2},
+      {label:'Services',        amt:34478,  pct:4.8},
+      {label:'Utilities',       amt:17018,  pct:2.4},
+      {label:'Sales & Mktg',    amt:6424,   pct:0.9},
+      {label:'Other+Lab+Cons',  amt:3688,   pct:0.5},
+    ]
+  }
 };
-/* ================================================================ */
 
 const MONTHS = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
-const CAT_PAL = ['#C8102E','#5a7ca8','#3a8a3a','#9a6c10','#9a5a7a','#5a9aaa','#c87a2a','#8a8070','#a87a4a','#6a8070','#4a6870'];
+const e  = (id) => document.getElementById(id);
+const f  = (v)  => v == null ? '—' : '€' + (Math.abs(v) >= 1000 ? (v/1000).toFixed(1) + 'K' : v.toLocaleString('it-IT'));
+const fp = (v)  => v == null ? '—' : (v >= 0 ? '+' : '') + v.toFixed(1) + '%';
+const bc = (v)  => v == null ? 'neu' : v >= 0 ? 'pos' : 'neg';
 
-// Find global max for bar scaling
-let globalMax = 0;
-for(const yr of [2023,2024,2025,2026]) for(const v of Object.values(DATA.monthly[yr])) if(v>globalMax) globalMax=v;
-
-/* ── MONTHLY TABLE ── */
-const mt = document.getElementById('monthlyTable');
-// header
-const thead = mt.createTHead();
-const hr = thead.insertRow();
-['Anno',...MONTHS].forEach((h,i)=>{
-  const th=document.createElement('th');th.textContent=h;hr.appendChild(th);
-});
-const tbody = mt.createTBody();
-const yrColors = {2026:'#C8102E',2025:'#3a8a3a',2024:'#5a7ca8',2023:'#b0a898'};
-[2023,2024,2025,2026].forEach(yr=>{
-  const tr=tbody.insertRow();
-  const td0=tr.insertCell();
-  td0.innerHTML=`<div class="yr-label${yr===2026?' cur':''}">${yr}</div>`;
-  MONTHS.forEach((_,i)=>{
-    const m=i+1, v=DATA.monthly[yr][m];
-    const td=tr.insertCell();
-    if(!v){td.innerHTML=`<span style="color:#e0d8cc">—</span>`;}
-    else{
-      const pct=(v/globalMax*100).toFixed(0);
-      td.innerHTML=`<div class="mval"><div class="mbar-bg"><div class="mbar-fill" style="width:${pct}%;background:${yrColors[yr]}"></div></div>${(v/1000).toFixed(0)}K</div>`;
-    }
+/* ── TABS ── */
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    e('page-' + t.dataset.tab).classList.add('active');
   });
 });
 
-/* ── CATEGORY TABLE ── */
-const ct = document.getElementById('catTable');
-const chead = ct.createTHead();
-const chr = chead.insertRow();
-['Categoria','Ricavi 2026','Quota','Var YoY'].forEach(h=>{const th=document.createElement('th');th.textContent=h;chr.appendChild(th);});
-const ctbody = ct.createTBody();
-const totR = DATA.categories_2026.reduce((s,c)=>s+c.total,0);
-const maxR = DATA.categories_2026[0].total;
-DATA.categories_2026.forEach((c,i)=>{
-  const prev=DATA.categories_2025[c.cat]||null;
-  const vp=prev?(c.total-prev)/prev*100:null;
-  const q=(c.total/totR*100).toFixed(1);
-  const vc=vp===null?'ba':vp>=0?'bp':'bn';
-  const vs=vp===null?'—':(vp>=0?'+':'')+vp.toFixed(1)+'%';
-  const tr=ctbody.insertRow();
-  tr.insertCell().innerHTML=`<div class="cname"><div class="cdot" style="background:${CAT_PAL[i]}"></div>${c.cat}</div>`;
-  tr.insertCell().innerHTML=`<div class="brow"><div class="bg"><div class="bf" style="width:${(c.total/maxR*100).toFixed(0)}%;background:${CAT_PAL[i]}"></div></div>€${(c.total/1000).toFixed(1)}K</div>`;
-  tr.insertCell().innerHTML=`<span style="color:#8a8070">${q}%</span>`;
-  tr.insertCell().innerHTML=`<span class="badge ${vc}">${vs}</span>`;
-});
+/* ════ INCASSI ════ */
+function buildIncassi() {
+  const q26 = D.q1[2026], q25 = D.q1[2025];
+  const dQ   = (q26 - q25) / q25 * 100;
+  const mar26 = D.monthly[2026].Mar, mar25 = D.monthly[2025].Mar;
+  const dM   = (mar26 - mar25) / mar25 * 100;
+  const feb26 = D.monthly[2026].Feb, feb25 = D.monthly[2025].Feb;
+  const dF   = (feb26 - feb25) / feb25 * 100;
+  const gen26 = D.monthly[2026].Gen, gen25 = D.monthly[2025].Gen;
+  const dG   = (gen26 - gen25) / gen25 * 100;
 
-/* ── PRODUCTS ── */
-const maxP=DATA.top_products[0].rev;
-DATA.top_products.forEach((p,i)=>{
-  const d=document.createElement('div');d.className='prow';
-  d.innerHTML=`<div class="pnum">${i+1}</div><div class="pinfo"><div class="pname">${p.name}</div><div class="pcat">${p.cat}</div></div><div class="pbar"><div class="pbarnum">${p.qty} pz</div><div class="pbarbg"><div class="pbarfill" style="width:${(p.rev/maxP*100).toFixed(0)}%"></div></div></div><div class="prev">€${(p.rev/1000).toFixed(1)}K</div>`;
-  document.getElementById('prodList').appendChild(d);
-});
+  e('kpi-incassi').innerHTML = `
+    <div class="kpi-card red">
+      <div class="kpi-label">Incasso Q1 2026</div>
+      <div class="kpi-value">${f(q26)}</div>
+      <div class="kpi-sub"><span class="${dQ>=0?'up':'down'}">${fp(dQ)}</span> vs Q1 2025 · ${f(q25)}</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-label">Gennaio 2026</div>
+      <div class="kpi-value">${f(gen26)}</div>
+      <div class="kpi-sub"><span class="${dG>=0?'up':'down'}">${fp(dG)}</span> vs Gen 2025 · ${f(gen25)}</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Febbraio 2026</div>
+      <div class="kpi-value">${f(feb26)}</div>
+      <div class="kpi-sub"><span class="${dF>=0?'up':'down'}">${fp(dF)}</span> vs Feb 2025 · ${f(feb25)}</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="kpi-label">Marzo 2026</div>
+      <div class="kpi-value">${f(mar26)}</div>
+      <div class="kpi-sub"><span class="${dM>=0?'up':'down'}">${fp(dM)}</span> vs Mar 2025 · ${f(mar25)}</div>
+    </div>`;
+}
 
-/* ── COSTS ── */
-const totC=DATA.costs.reduce((s,c)=>s+c.amount,0);
-DATA.costs.forEach(c=>{
-  const pct=(c.amount/totC*100);
-  const d=document.createElement('div');d.className='crow';
-  d.innerHTML=`<div class="ccat"><div class="cdot" style="background:${c.color}"></div>${c.centro}</div><div class="cbar"><div class="cbarbg"><div class="cbarfill" style="width:${pct.toFixed(0)}%;background:${c.color}"></div></div></div><div class="cpct">${pct.toFixed(0)}%</div><div class="camt">€${(c.amount/1000).toFixed(1)}K</div>`;
-  document.getElementById('costList').appendChild(d);
-});
+function buildMonthly() {
+  const yrs = [2023, 2024, 2025, 2026];
+  const colors = { 2023:'#bbb', 2024:'#6b9fd4', 2025:'#5fad6e', 2026:'#e03040' };
+  const allV = yrs.flatMap(y => Object.values(D.monthly[y]));
+  const maxV = Math.max(...allV);
+
+  let h = `<thead><tr><th>Anno</th>${MONTHS.map(m=>`<th>${m}</th>`).join('')}<th>Totale</th></tr></thead><tbody>`;
+  yrs.forEach(yr => {
+    const tot = Object.values(D.monthly[yr]).reduce((a,b)=>a+b,0);
+    h += `<tr><td class="yr-cell ${yr===2026?'cur':''}">${yr}</td>`;
+    MONTHS.forEach(m => {
+      const v = D.monthly[yr][m];
+      if (!v) { h += `<td style="color:#ccc">—</td>`; return; }
+      const w = (v / maxV * 100).toFixed(0);
+      h += `<td><div class="bar-cell">
+        <div class="bar-track"><div class="bar-fill" style="width:${w}%;background:${colors[yr]}"></div></div>
+        <span style="font-size:12px">${(v/1000).toFixed(0)}K</span>
+      </div></td>`;
+    });
+    h += `<td><strong>${(tot/1000).toFixed(0)}K</strong></td></tr>`;
+  });
+  // delta row
+  h += `<tr class="total"><td>Δ 25→26</td>`;
+  MONTHS.forEach(m => {
+    const v25 = D.monthly[2025][m], v26 = D.monthly[2026][m];
+    if (!v26) { h += `<td style="color:#ccc">—</td>`; return; }
+    const d = (v26 - v25) / v25 * 100;
+    h += `<td><span class="badge ${d>=0?'pos':'neg'}">${d>=0?'+':''}${d.toFixed(0)}%</span></td>`;
+  });
+  const dQ = (D.q1[2026]-D.q1[2025])/D.q1[2025]*100;
+  h += `<td><span class="badge ${dQ>=0?'pos':'neg'}">${dQ>=0?'+':''}${dQ.toFixed(1)}%</span></td></tr>`;
+  h += `</tbody>`;
+  e('tbl-monthly').innerHTML = h;
+}
+
+function buildWeekend() {
+  let h = `<thead><tr><th>Anno</th><th>Feriali</th><th>Weekend</th><th>% WE</th><th>W/F</th></tr></thead><tbody>`;
+  D.weekend.forEach(r => {
+    h += `<tr><td><strong>${r.anno}</strong></td><td>${f(r.feriali)}</td><td>${f(r.weekend)}</td><td>${r.pctWE.toFixed(1)}%</td><td>${r.ratio.toFixed(2)}×</td></tr>`;
+  });
+  h += `</tbody>`;
+  e('tbl-weekend').innerHTML = h;
+}
+
+function buildDowk() {
+  const days = ['Lun','Mar','Mer','Gio','Ven','Sab','Dom'];
+  const keys  = ['lun','mar','mer','gio','ven','sab','dom'];
+  let h = `<thead><tr><th>Anno</th>${days.map(d=>`<th>${d}</th>`).join('')}</tr></thead><tbody>`;
+  D.dowk.forEach(r => {
+    h += `<tr><td><strong>${r.anno}</strong></td>`;
+    keys.forEach(k => {
+      const bold = k==='sab'||k==='dom';
+      h += `<td${bold?' style="font-weight:600"':''}>${r[k].toLocaleString('it-IT')}</td>`;
+    });
+    h += `</tr>`;
+  });
+  h += `</tbody>`;
+  e('tbl-dowk').innerHTML = h;
+}
+
+/* ════ PRODOTTI ════ */
+function buildCategories() {
+  const tot26 = D.categories.reduce((s,c)=>s+c.rev26,0);
+  const tot25 = D.categories.reduce((s,c)=>s+c.rev25,0);
+  const maxR  = Math.max(...D.categories.map(c=>c.rev26));
+  const COLS = ['#e03040','#2563eb','#16a34a','#ea580c','#7c3aed','#0891b2','#ca8a04','#888','#a87a4a','#6a8070','#4a6870'];
+
+  let h = `<thead><tr><th>Categoria</th><th>Qty 2025</th><th>Rev 2025</th><th>Qty 2026</th><th>Rev 2026</th><th>Mix</th><th>Δ Rev</th><th>Δ%</th></tr></thead><tbody>`;
+  D.categories.forEach((c,i) => {
+    const dR = c.rev26 - c.rev25;
+    const dp = dR / c.rev25 * 100;
+    const mix = (c.rev26 / tot26 * 100).toFixed(1);
+    const w = (c.rev26 / maxR * 100).toFixed(0);
+    h += `<tr>
+      <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${COLS[i]};margin-right:7px;vertical-align:middle"></span>${c.cat}</td>
+      <td>${c.qty25.toLocaleString('it-IT')}</td>
+      <td>${f(c.rev25)}</td>
+      <td>${c.qty26.toLocaleString('it-IT')}</td>
+      <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:${w}%;background:${COLS[i]}"></div></div>${f(c.rev26)}</div></td>
+      <td style="color:#888">${mix}%</td>
+      <td><span class="badge ${bc(dR)}">${dR>=0?'+':''}${f(Math.abs(dR)).replace('€','€')}</span></td>
+      <td><span class="badge ${bc(dp)}">${fp(dp)}</span></td>
+    </tr>`;
+  });
+  const totDr = tot26 - tot25;
+  const totDp = totDr / tot25 * 100;
+  h += `<tr class="total"><td>TOTALE</td><td></td><td>${f(tot25)}</td><td></td><td>${f(tot26)}</td><td></td>
+    <td><span class="badge ${bc(totDr)}">${totDr>=0?'+':''}${f(Math.abs(totDr)).replace('€','€')}</span></td>
+    <td><span class="badge ${bc(totDp)}">${fp(totDp)}</span></td></tr>`;
+  h += `</tbody>`;
+  e('tbl-cat').innerHTML = h;
+}
+
+function buildProducts() {
+  const maxR = D.products[0].rev26;
+  let h = '';
+  D.products.forEach(p => {
+    const dp = p.rev25 ? (p.rev26 - p.rev25) / p.rev25 * 100 : null;
+    const w26 = (p.rev26 / maxR * 100).toFixed(0);
+    const w25 = p.rev25 ? (p.rev25 / maxR * 100).toFixed(0) : 0;
+    h += `<div class="prod-row">
+      <div class="prod-num">${p.n}</div>
+      <div class="prod-info">
+        <div class="prod-name">${p.name}</div>
+        <div class="prod-cat">${p.cat}</div>
+      </div>
+      <div class="prod-bars">
+        <div class="prod-bar-row">
+          <div class="prod-bar-lbl">26</div>
+          <div class="prod-bar-bg"><div class="prod-bar-f" style="width:${w26}%;background:#1e2d45"></div></div>
+        </div>
+        <div class="prod-bar-row">
+          <div class="prod-bar-lbl">25</div>
+          <div class="prod-bar-bg"><div class="prod-bar-f" style="width:${w25}%;background:#ccc"></div></div>
+        </div>
+      </div>
+      <div class="prod-rev26">${f(p.rev26)}</div>
+      <div class="prod-rev25">${p.rev25 ? f(p.rev25) : '—'}</div>
+      <div class="prod-delta">
+        ${dp !== null
+          ? `<span class="badge ${bc(dp)}">${fp(dp)}</span>`
+          : `<span class="badge new">Nuovo</span>`}
+      </div>
+    </div>`;
+  });
+  e('prod-list').innerHTML = h;
+}
+
+/* ════ COSTI ════ */
+function buildKpiCosti() {
+  const tot = 74044, rev = D.q1[2026];
+  e('kpi-costi').innerHTML = `
+    <div class="kpi-card red">
+      <div class="kpi-label">Costi totali Q1 2026 (YTD)</div>
+      <div class="kpi-value">${f(tot)}</div>
+      <div class="kpi-sub">190 fatture · costo medio €390</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="kpi-label">Cost / Revenue Q1</div>
+      <div class="kpi-value">${(tot/rev*100).toFixed(1)}%</div>
+      <div class="kpi-sub">Costi su incassi Q1 ${f(rev)}</div>
+    </div>
+    <div class="kpi-card teal">
+      <div class="kpi-label">IVA totale Q1</div>
+      <div class="kpi-value">€12.3K</div>
+      <div class="kpi-sub">Su imponibile ${f(tot)}</div>
+    </div>`;
+}
+
+function buildCDC() {
+  const maxY = D.cdc[0].ytd;
+  let h = `<thead><tr><th>Centro costo</th><th>Gen</th><th>Feb</th><th>Mar</th><th>YTD</th><th>%</th></tr></thead><tbody>`;
+  D.cdc.forEach(r => {
+    const w = (r.ytd / maxY * 100).toFixed(0);
+    h += `<tr>
+      <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${r.color};margin-right:7px;vertical-align:middle"></span>${r.cdc}</td>
+      <td>${f(r.gen)}</td><td>${f(r.feb)}</td><td>${r.mar ? f(r.mar) : '—'}</td>
+      <td><div class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:${w}%;background:${r.color}"></div></div><strong>${f(r.ytd)}</strong></div></td>
+      <td style="color:#888">${r.pct.toFixed(1)}%</td>
+    </tr>`;
+  });
+  const tot = D.cdc.reduce((s,r)=>s+r.ytd,0);
+  h += `<tr class="total"><td>TOTALE</td><td></td><td></td><td></td><td>${f(tot)}</td><td>100%</td></tr>`;
+  h += `</tbody>`;
+  e('tbl-cdc').innerHTML = h;
+}
+
+function buildCostDetail() {
+  const maxA = D.costDetail[0].amt;
+  let h = '';
+  D.costDetail.forEach(c => {
+    const w = (c.amt / maxA * 100).toFixed(0);
+    h += `<div class="cost-row">
+      <div class="cost-name">
+        <div>${c.name}</div>
+        <div class="cost-sub">${c.sub}</div>
+      </div>
+      <div class="cost-bar"><div class="cost-bg"><div class="cost-f" style="width:${w}%;background:${c.color}"></div></div></div>
+      <div class="cost-amt">${f(c.amt)}</div>
+    </div>`;
+  });
+  e('cost-detail').innerHTML = h;
+}
+
+/* ════ BUDGET ════ */
+function buildKpiBudget() {
+  const ytdBud = 202024, ytdEff = D.q1[2026];
+  const sc = ytdEff - ytdBud;
+  const sp = sc / ytdBud * 100;
+  e('kpi-budget').innerHTML = `
+    <div class="kpi-card blue">
+      <div class="kpi-label">Budget annuo 2026</div>
+      <div class="kpi-value">${f(D.pl.ricaviBudget)}</div>
+      <div class="kpi-sub">+5.8% su 2025 · ${f(D.totals[2025])}</div>
+    </div>
+    <div class="kpi-card ${sc>=0?'green':'orange'}">
+      <div class="kpi-label">Effettivo Q1 vs Budget Q1</div>
+      <div class="kpi-value">${f(ytdEff)}</div>
+      <div class="kpi-sub">
+        <span class="${sc>=0?'up':'down'}">${sc>=0?'+':''}${f(Math.abs(sc))} (${fp(sp)})</span>
+        vs budget ${f(ytdBud)}
+      </div>
+    </div>`;
+}
+
+function buildBudgetTable() {
+  let h = `<thead><tr><th>Mese</th><th>Effettivo 2025</th><th>Budget 2026</th><th>Effettivo 2026</th><th>Scostamento €</th><th>Scostamento %</th></tr></thead><tbody>`;
+  let ytdE = 0, ytdB = 0;
+  D.budget.forEach(r => {
+    const sc  = r.eff26 != null ? r.eff26 - r.bud26 : null;
+    const scp = sc != null ? sc / r.bud26 * 100 : null;
+    if (r.eff26) ytdE += r.eff26;
+    ytdB += r.bud26;
+    h += `<tr>
+      <td><strong>${r.mese}</strong></td>
+      <td>${f(r.eff25)}</td>
+      <td>${f(r.bud26)}</td>
+      <td>${r.eff26 != null ? f(r.eff26) : '<span style="color:#ccc">atteso</span>'}</td>
+      <td>${sc != null ? `<span class="badge ${bc(sc)}">${sc>=0?'+':''}${f(Math.abs(sc))}</span>` : '—'}</td>
+      <td>${scp != null ? `<span class="badge ${bc(scp)}">${fp(scp)}</span>` : '—'}</td>
+    </tr>`;
+  });
+  // YTD row
+  const scYTD = ytdE - ytdB; // only for months with data
+  const q1ytdB = 46557+38017+117450;
+  const q1sc = D.q1[2026] - q1ytdB;
+  h += `<tr class="total"><td>YTD Q1</td><td>${f(D.q1[2025])}</td><td>${f(q1ytdB)}</td><td>${f(D.q1[2026])}</td>
+    <td><span class="badge ${bc(q1sc)}">${q1sc>=0?'+':''}${f(Math.abs(q1sc))}</span></td>
+    <td><span class="badge ${bc(q1sc/q1ytdB*100)}">${fp(q1sc/q1ytdB*100)}</span></td>
+  </tr>`;
+  h += `</tbody>`;
+  e('tbl-budget').innerHTML = h;
+}
+
+function buildPL() {
+  const pl = D.pl;
+  const rows = [
+    {label:'Ricavi Budget 2026',         v: pl.ricaviBudget,   pct:100,       bold:true},
+    {label:'— Q1 effettivo',             v: pl.ricaviQ1,       pct:26.1},
+    {label:'— Q2–Q4 proiettati',         v: pl.ricaviProjQ24,  pct:73.9},
+    {label:'',v:null,pct:null},
+    {label:'Costi operativi (proiez.)',   v:-pl.costiTot,       pct:-41.4,     bold:true},
+    ...pl.voci.map(v=>({label:'— '+v.label, v:-v.amt, pct:-v.pct})),
+    {label:'',v:null,pct:null},
+    {label:'Margine lordo (EBITDA aprox.)', v:pl.margine, pct:pl.marginePct, bold:true, green:true},
+  ];
+  let h = `<thead><tr><th>Voce</th><th>Importo</th><th>% Ricavi</th></tr></thead><tbody>`;
+  rows.forEach(r => {
+    if (!r.label) { h += `<tr><td colspan="3" style="padding:3px 0;border:none"></td></tr>`; return; }
+    const vStyle = r.green ? 'color:#16a34a;font-weight:700' : r.v < 0 ? 'color:#dc2626' : '';
+    h += `<tr${r.bold?' class="total"':''}>
+      <td${r.green?' style="color:#16a34a;font-weight:700"':''}>${r.label}</td>
+      <td style="${vStyle}">${r.v != null ? (r.v<0?'-':'')+f(Math.abs(r.v)) : '—'}</td>
+      <td style="${vStyle}">${r.pct != null ? r.pct.toFixed(1)+'%' : '—'}</td>
+    </tr>`;
+  });
+  h += `</tbody>`;
+  e('tbl-pl').innerHTML = h;
+}
+
+function buildCostProj() {
+  const maxA = D.pl.voci[0].amt;
+  let h = '';
+  D.pl.voci.forEach(v => {
+    const w = (v.amt / maxA * 100).toFixed(0);
+    const colors = {
+      'VIC Beverage':'#2563eb','Leases/Rentals':'#7c3aed','VIC Food':'#16a34a',
+      'Services':'#ea580c','Utilities':'#0891b2','Sales & Mktg':'#ca8a04','Other+Lab+Cons':'#888'
+    };
+    const col = colors[v.label] || '#888';
+    h += `<div class="cost-row">
+      <div class="cost-name">
+        <div>${v.label}</div>
+        <div class="cost-sub">${v.pct.toFixed(1)}% su ricavi</div>
+      </div>
+      <div class="cost-bar"><div class="cost-bg"><div class="cost-f" style="width:${w}%;background:${col}"></div></div></div>
+      <div class="cost-amt"><strong>${f(v.amt)}</strong></div>
+    </div>`;
+  });
+  h += `<div style="margin-top:14px;padding-top:12px;border-top:1px solid #eee;display:flex;justify-content:space-between;font-size:13px;font-weight:700">
+    <span>TOTALE</span><span>${f(D.pl.costiTot)}</span>
+  </div>`;
+  e('cost-proj').innerHTML = h;
+}
+
+/* ── INIT ── */
+buildIncassi(); buildMonthly(); buildWeekend(); buildDowk();
+buildCategories(); buildProducts();
+buildKpiCosti(); buildCDC(); buildCostDetail();
+buildKpiBudget(); buildBudgetTable(); buildPL(); buildCostProj();
 </script>
 </body>
 </html>
