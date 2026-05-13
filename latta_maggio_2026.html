@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>LATTA – Maggio 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--r:#C8102E;--dark:#1a1a1a;--mid:#555;--light:#f7f6f4;--border:#e0ddd8;--w:#fff;--gold:#b89a5c}
+html,body{background:var(--light);font-family:'Barlow',sans-serif;color:var(--dark);-webkit-text-size-adjust:100%}
+.view{display:none;min-height:100vh}.view.active{display:block}
+
+/* TOP BAR */
+.top-bar{background:var(--dark);padding:11px 14px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;gap:8px}
+.brand{font-family:'Barlow Condensed',sans-serif;font-size:21px;font-weight:900;color:#fff;cursor:pointer;line-height:1;flex-shrink:0}
+.brand small{font-size:9px;font-weight:400;letter-spacing:0.18em;color:rgba(255,255,255,0.35);text-transform:uppercase;display:block}
+.red-bar{height:3px;background:var(--r)}
+.back-btn{background:transparent;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.65);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:6px 10px;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.btn-add{background:var(--r);color:#fff;border:none;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:7px 11px;cursor:pointer;white-space:nowrap;flex-shrink:0}
+
+/* CAL INNER */
+.inner{max-width:960px;margin:0 auto;padding:16px 12px 80px}
+
+/* HEADER */
+.cal-hd{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:4px}
+.cal-title{font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:900;line-height:1}
+.cal-title span{color:var(--r)}
+.cal-sub{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--mid)}
+
+/* TABS */
+.tab-bar{display:flex;border-bottom:1px solid var(--border);margin-bottom:16px}
+.tab{flex:1;text-align:center;padding:9px 8px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--mid);cursor:pointer;border-bottom:2px solid transparent}
+.tab.active{color:var(--r);border-bottom-color:var(--r)}
+
+/* LIST HEAD */
+.list-hd{background:var(--dark);padding:7px 14px;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.4);display:flex;justify-content:space-between;align-items:center}
+.cpill{background:var(--r);color:#fff;font-size:10px;padding:1px 7px}
+.list-wrap{background:var(--w);border:1px solid var(--border)}
+
+/* LIST ROW — mobile stacked */
+.lr{display:flex;align-items:center;gap:10px;padding:11px 12px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.1s}
+.lr:last-child{border-bottom:none}
+.lr:active{background:#f5f4f2}
+.lr.annullato{opacity:0.5}.lr.rimandato{opacity:0.7}
+.lr-date{flex-shrink:0;width:34px;text-align:center}
+.lr-day{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;line-height:1;color:var(--dark)}
+.lr-dow{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--mid)}
+.lr-body{flex:1;min-width:0}
+.lr-title{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;line-height:1.2;color:var(--dark)}
+.lr-title.cancelled{text-decoration:line-through;opacity:0.6}
+.lr-meta{display:flex;align-items:center;gap:5px;margin-top:3px;flex-wrap:wrap}
+.badge{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;padding:2px 6px}
+.stbadge{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:2px 6px}
+.sb-ann{background:#fce8e8;color:#a30000;border:1px solid #e8b0b0}
+.sb-rim{background:#fff3cd;color:#7a5a00;border:1px solid #f0d080}
+.lr-note{font-size:11px;color:var(--mid)}
+.lr-arr{font-size:18px;color:var(--r);flex-shrink:0}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--border);background:var(--w);margin-top:14px}
+.stat{padding:9px 4px;border-right:1px solid var(--border);text-align:center}
+.stat:last-child{border-right:none}
+.stat-n{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;line-height:1}
+.stat-l{font-family:'Barlow Condensed',sans-serif;font-size:8px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--mid);margin-top:1px}
+
+/* GRID CAL */
+.legend{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.leg-item{display:flex;align-items:center;gap:4px;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--mid)}
+.leg-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);border-left:1px solid var(--border);border-top:1px solid var(--border)}
+.dow{background:var(--dark);color:rgba(255,255,255,0.5);font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:600;letter-spacing:0.06em;text-align:center;padding:5px 1px;border-right:1px solid rgba(255,255,255,0.07)}
+.day{min-height:48px;background:var(--w);border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:3px 2px}
+.day.empty{background:var(--light)}
+.dn{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:var(--dark);width:17px;height:17px;display:flex;align-items:center;justify-content:center;margin-bottom:1px}
+.day.today .dn{background:var(--r);color:#fff}
+.day-evs{display:flex;flex-direction:column;gap:1px}
+.ep{font-size:8px;line-height:1.2;padding:1px 2px;cursor:pointer;border-left:2px solid;overflow:hidden}
+.ep-n{font-family:'Barlow',sans-serif;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ep.annullato{opacity:0.4;text-decoration:line-through}
+.ep.rimandato{opacity:0.6;font-style:italic}
+
+/* MODAL */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;align-items:flex-end;justify-content:center}
+.modal-ov.open{display:flex}
+.modal{background:var(--w);width:100%;max-width:520px;border-top:3px solid var(--r);max-height:90vh;overflow-y:auto}
+.modal-hd{background:var(--dark);padding:13px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0}
+.modal-hd span{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#fff}
+.modal-x{background:none;border:none;color:rgba(255,255,255,0.5);font-size:20px;cursor:pointer;padding:4px 8px;line-height:1}
+.modal-body{padding:16px}
+.mf{margin-bottom:14px}
+.mf label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.13em;text-transform:uppercase;color:var(--r);display:block;margin-bottom:4px}
+.mf input,.mf select{width:100%;border:none;border-bottom:1px solid #ddd;background:transparent;font-family:'Barlow',sans-serif;font-size:16px;color:var(--dark);padding:5px 0;outline:none}
+.modal-ft{padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px}
+.btn-cancel{flex:1;background:transparent;border:1px solid var(--border);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--mid);padding:10px;cursor:pointer}
+.btn-ok{flex:2;background:var(--r);color:#fff;border:none;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:10px;cursor:pointer}
+
+/* ── SCHEDA ── */
+.scheda{background:var(--w);border:1px solid var(--border)}
+.sch-hd{background:var(--dark);padding:14px 16px;display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.sch-brand{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#fff;line-height:1}
+.sch-brand small{font-size:9px;font-weight:400;letter-spacing:0.2em;color:rgba(255,255,255,0.35);text-transform:uppercase;display:block}
+.sch-lbl{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:600;letter-spacing:0.13em;color:var(--r);text-transform:uppercase;background:rgba(200,16,46,0.12);padding:3px 8px;border:1px solid rgba(200,16,46,0.3);align-self:flex-end;white-space:nowrap}
+.stato-banner{display:none;padding:8px 16px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase}
+.stato-banner.annullato{display:block;background:#fce8e8;color:#a30000;border-bottom:2px solid #e8b0b0}
+.stato-banner.rimandato{display:block;background:#fff3cd;color:#7a5a00;border-bottom:2px solid #f0d080}
+.nome-wrap{padding:14px 16px 10px;border-bottom:1px solid var(--border)}
+.flabel{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--r);margin-bottom:4px}
+.fbig{width:100%;border:none;border-bottom:1.5px solid var(--dark);background:transparent;font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;color:var(--dark);padding:2px 0 4px;outline:none}
+.fbig::placeholder{color:#ccc;font-weight:400}
+
+/* grid-top: stacked mobile, 3-col desktop */
+.gtop{display:flex;flex-direction:column;border-bottom:1px solid var(--border)}
+.gcell{padding:10px 16px;border-bottom:1px solid var(--border)}
+.gcell:last-child{border-bottom:none}
+.clbl{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.13em;text-transform:uppercase;color:var(--r);margin-bottom:4px}
+.cval{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:var(--dark)}
+.gcell input{width:100%;border:none;border-bottom:1px solid var(--border);background:transparent;font-family:'Barlow',sans-serif;font-size:16px;color:var(--dark);padding:4px 0;outline:none}
+
+/* sections */
+.sec{padding:12px 16px;border-bottom:1px solid var(--border)}
+.sec-t{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--mid);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.sec-t::after{content:'';flex:1;height:1px;background:var(--border)}
+.sbadge{font-size:9px;background:var(--r);color:#fff;padding:1px 5px}
+.tag-grp{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
+.tag{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.06em;padding:5px 9px;border:1px solid var(--border);cursor:pointer;user-select:none;color:var(--mid)}
+.tag.on{background:var(--r);border-color:var(--r);color:#fff}
+
+/* fields */
+.f{margin-bottom:12px}.f:last-child{margin-bottom:0}
+.f label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--r);display:block;margin-bottom:3px}
+.f input,.f textarea,.f select{width:100%;border:none;border-bottom:1px solid #ddd;background:transparent;font-family:'Barlow',sans-serif;font-size:16px;color:var(--dark);padding:4px 0 5px;outline:none;resize:none}
+.f input:focus,.f textarea:focus{border-bottom-color:var(--r)}
+.f textarea{min-height:56px;line-height:1.6}
+.f input::placeholder,.f textarea::placeholder{color:#bbb;font-style:italic}
+/* 2-col grid only on wider screens */
+.g2{display:flex;flex-direction:column;gap:0}
+.g3{display:flex;flex-direction:column;gap:0}
+
+.notebox{background:var(--light);border-left:3px solid var(--r);padding:10px 12px}
+.notebox textarea{width:100%;border:none;background:transparent;font-family:'Barlow',sans-serif;font-size:15px;color:var(--dark);outline:none;resize:none;min-height:60px;line-height:1.6}
+.notebox textarea::placeholder{color:#bbb;font-style:italic}
+.alertbox{border-left:3px solid #e89a00;background:#fff8e1;padding:9px 12px;font-size:13px;color:#7a4a00;line-height:1.5;margin-bottom:10px}
+
+/* staff */
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;min-height:4px}
+.chip{display:flex;align-items:center;gap:5px;background:var(--dark);color:#fff;padding:5px 10px 5px 8px;font-family:'Barlow',sans-serif;font-size:12px}
+.chip .role{font-size:9px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.06em}
+.chip .x{cursor:pointer;opacity:0.45;margin-left:3px;font-size:14px;padding:2px}
+.add-staff{display:flex;gap:6px;align-items:center;margin-top:8px;flex-wrap:wrap}
+.add-staff input{flex:1;min-width:100px;border:none;border-bottom:1px solid #ddd;background:transparent;font-family:'Barlow',sans-serif;font-size:15px;color:var(--dark);padding:4px 0;outline:none}
+.add-staff select{border:none;border-bottom:1px solid #ddd;background:transparent;font-family:'Barlow',sans-serif;font-size:14px;color:var(--dark);padding:4px 0;outline:none}
+.add-staff button,.spesa-btn{background:var(--r);color:#fff;border:none;padding:9px 14px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+
+/* menu box */
+.menu-box{background:var(--light);border-left:3px solid var(--r);padding:10px 12px;margin-top:10px}
+.menu-box textarea{width:100%;border:none;background:transparent;font-family:'Barlow',sans-serif;font-size:15px;color:var(--dark);outline:none;resize:none;min-height:76px;line-height:1.7}
+.menu-box textarea::placeholder{color:#bbb;font-style:italic}
+
+/* stato tags */
+.stato-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.stag{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.06em;padding:7px 12px;border:1px solid var(--border);cursor:pointer;user-select:none;color:var(--mid)}
+.stag.sok{background:var(--dark);border-color:var(--dark);color:#fff}
+.stag.sann{background:#a30000;border-color:#a30000;color:#fff}
+.stag.srim{background:#a07800;border-color:#a07800;color:#fff}
+
+/* comunicazione */
+.comm-pl{display:flex;flex-direction:column;gap:6px;padding:10px 0;border-bottom:1px solid var(--border)}
+.comm-pl:last-child{border-bottom:none}
+.comm-pl-hd{display:flex;align-items:center;justify-content:space-between}
+.comm-pl-name{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--dark)}
+.comm-check{display:flex;align-items:center;gap:5px}
+.comm-check input[type=checkbox]{accent-color:var(--r);width:16px;height:16px;cursor:pointer}
+.comm-check label{font-family:'Barlow',sans-serif;font-size:13px;color:var(--mid);cursor:pointer}
+.comm-input{width:100%;border:none;border-bottom:1px solid #eee;background:transparent;font-family:'Barlow',sans-serif;font-size:14px;color:var(--dark);padding:3px 0;outline:none}
+.comm-input::placeholder{color:#bbb;font-style:italic}
+
+/* economico */
+.eco-incasso{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--dark);border:none;border-bottom:2px solid var(--dark);background:transparent;outline:none;width:180px;padding:0 0 2px}
+.eco-incasso::placeholder{color:#ccc}
+.eco-card{border:1px solid var(--border);padding:12px 14px;margin-bottom:12px}
+.eco-ctitle{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--mid);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.eco-ctitle::after{content:'';flex:1;height:1px;background:var(--border)}
+.eco-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.eco-row label{font-family:'Barlow',sans-serif;font-size:13px;color:var(--dark);flex:1;min-width:0}
+.eco-row input{width:88px;border:none;border-bottom:1px solid #ddd;background:transparent;font-family:'Barlow',sans-serif;font-size:15px;color:var(--dark);padding:3px 0;outline:none;text-align:right;flex-shrink:0}
+.eco-row .cur{font-size:12px;color:var(--mid);flex-shrink:0}
+.eco-add-row{display:flex;gap:6px;margin-top:10px;align-items:center}
+.eco-add-row input{flex:1;border:none;border-bottom:1px solid #ddd;background:transparent;font-family:'Barlow',sans-serif;font-size:14px;color:var(--dark);padding:3px 0;outline:none}
+.eco-add-row input::placeholder{color:#bbb;font-style:italic}
+.eco-add-row .amt{width:80px;flex:none;text-align:right}
+.eco-subtotal{margin-top:12px;padding-top:10px;border-top:1.5px solid var(--dark);display:flex;justify-content:space-between;align-items:baseline}
+.eco-subtotal-lbl{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--mid)}
+.eco-subtotal-val{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:var(--dark)}
+.eco-result{background:var(--dark);padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-top:0}
+.eco-result-lbl{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.5)}
+.eco-result-val{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900}
+.eco-result-val.pos{color:#6ec96e}.eco-result-val.neg{color:#e87070}.eco-result-val.zero{color:rgba(255,255,255,0.35)}
+
+/* debrief */
+.stars{display:flex;gap:8px;margin-bottom:12px}
+.star{font-size:28px;cursor:pointer;color:#ddd;user-select:none}
+.star.on{color:var(--gold)}
+.kpi-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+.kpi-box{border:1px solid var(--border);padding:10px 8px;text-align:center}
+.kpi-lbl{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--mid);margin-bottom:4px}
+.kpi-inp{width:100%;border:none;border-bottom:1px solid #ddd;background:transparent;font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;color:var(--dark);text-align:center;outline:none;padding:2px 0}
+.kpi-inp::placeholder{color:#ccc}
+
+/* scheda footer */
+.sch-ft{background:var(--dark);padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
+.sf-txt{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.25)}
+.sf-date{font-family:'Barlow Condensed',sans-serif;font-size:10px;color:rgba(255,255,255,0.4);margin-right:10px}
+.print-btn{background:var(--r);color:#fff;border:none;padding:7px 14px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;cursor:pointer}
+
+/* ── DESKTOP (≥600px) ── */
+@media(min-width:600px){
+  .top-bar{padding:12px 24px}
+  .brand{font-size:24px}
+  .inner{padding:24px 20px 60px}
+  .cal-title{font-size:48px}
+  .tab{flex:none;text-align:left;padding:9px 20px}
+  .gtop{display:grid;grid-template-columns:1fr 1fr 1fr;flex-direction:unset}
+  .gcell{border-bottom:none;border-right:1px solid var(--border);padding:12px 18px}
+  .gcell:last-child{border-right:none}
+  .gcell input{font-size:14px;padding:3px 0}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px;flex-direction:unset}
+  .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 14px;flex-direction:unset}
+  .f input,.f textarea,.f select{font-size:13.5px;padding:3px 0 4px}
+  .f textarea{min-height:44px}
+  .eco-card{margin-bottom:0}
+  .eco-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .comm-pl{flex-direction:row;align-items:center;gap:10px}
+  .comm-pl-hd{display:contents}
+  .comm-pl-name{width:88px;flex-shrink:0}
+  .comm-input{flex:1}
+  .modal-ov{align-items:center}
+  .modal{max-width:480px;border-radius:0}
+}
+
+@media print{
+  #view-cal{display:none!important}
+  #view-scheda{display:block!important}
+  .top-bar,.back-btn,.print-btn,.add-staff button,.spesa-btn,.btn-add,.modal-ov{display:none!important}
+}
+</style>
+</head>
+<body>
+
+<!-- CALENDARIO -->
+<div id="view-cal" class="view active">
+  <div class="top-bar">
+    <div class="brand">LATTA<small>Fermenti e Miscele</small></div>
+    <button class="btn-add" onclick="openModal()">+ Evento</button>
+  </div>
+  <div class="red-bar"></div>
+  <div class="inner">
+    <div class="cal-hd">
+      <div class="cal-title"><span>Maggio</span> 2026</div>
+      <div class="cal-sub">Programmazione interna</div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab active" id="tab-lista" onclick="showTab('lista')">Lista eventi</div>
+      <div class="tab" id="tab-grid" onclick="showTab('grid')">Calendario</div>
+    </div>
+    <div id="pane-lista">
+      <div class="list-hd"><span id="ev-count">16 eventi</span><span class="cpill">Maggio 2026</span></div>
+      <div class="list-wrap" id="lista-rows"></div>
+      <div class="stats-row" id="stats-row"></div>
+    </div>
+    <div id="pane-grid" style="display:none">
+      <div class="legend">
+        <div class="leg-item"><div class="leg-dot" style="background:#2d8a2d"></div>Live</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#2266cc"></div>Sport</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#e89a00"></div>Food</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#8833cc"></div>Community</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#999"></div>Altro</div>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-ov" id="add-modal">
+  <div class="modal">
+    <div class="modal-hd"><span>Nuovo evento</span><button class="modal-x" onclick="closeModal()">&#10005;</button></div>
+    <div class="modal-body">
+      <div class="mf"><label>Nome</label><input id="new-name" placeholder="es. Jazz Night" autocomplete="off"/></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="mf"><label>Giorno</label><input id="new-day" type="number" min="1" max="31" inputmode="numeric" placeholder="1-31"/></div>
+        <div class="mf"><label>Orario</label><input id="new-orario" placeholder="es. 20:00-23:00"/></div>
+      </div>
+      <div class="mf"><label>Tipo</label>
+        <select id="new-tipo">
+          <option value="live">Live Music</option>
+          <option value="sport">Sport</option>
+          <option value="food">Food &amp; Drink</option>
+          <option value="community">Community</option>
+          <option value="altro" selected>Altro</option>
+        </select>
+      </div>
+      <div class="mf"><label>Note</label><input id="new-note" placeholder="Informazioni aggiuntive..." autocomplete="off"/></div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn-cancel" onclick="closeModal()">Annulla</button>
+      <button class="btn-ok" onclick="addEvent()">Aggiungi</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCHEDA -->
+<div id="view-scheda" class="view">
+  <div class="top-bar">
+    <div class="brand" onclick="goBack()">LATTA<small>Fermenti e Miscele</small></div>
+    <button class="back-btn" onclick="goBack()">&#8592; Maggio</button>
+  </div>
+  <div class="red-bar"></div>
+  <div class="inner"><div class="scheda" id="scheda-body"></div></div>
+</div>
+
+<script>
+var EVENTI=[
+  {d:1, name:"Latta da Lisergica",    tipo:"altro",    orario:"",            note:"",                                  stato:"ok"},
+  {d:3, name:"Roma vs Fiorentina",    tipo:"sport",    orario:"",            note:"",                                  stato:"ok"},
+  {d:9, name:"FARO",                  tipo:"food",     orario:"",            note:"",                                  stato:"ok"},
+  {d:10,name:"Roma vs Parma",         tipo:"sport",    orario:"",            note:"",                                  stato:"ok"},
+  {d:10,name:"Daniele Cordisco Trio", tipo:"live",     orario:"",            note:"",                                  stato:"ok"},
+  {d:10,name:"Pop up Soda Company",   tipo:"altro",    orario:"",            note:"da Social Hub",                     stato:"ok"},
+  {d:14,name:"Sara Angotzi",          tipo:"live",     orario:"",            note:"",                                  stato:"ok"},
+  {d:16,name:"Roma Tropicale",        tipo:"community",orario:"",            note:"",                                  stato:"ok"},
+  {d:17,name:"Roma vs Lazio",         tipo:"sport",    orario:"",            note:"Stadlin fa live music",             stato:"ok"},
+  {d:18,name:"Gruppo privato",        tipo:"altro",    orario:"17:00-20:30", note:"Esclusiva h 17:00-20:30",           stato:"ok"},
+  {d:20,name:"Evento fuori scena",    tipo:"altro",    orario:"",            note:"con Ginevra",                       stato:"ok"},
+  {d:22,name:"Maria Laura Scanu",     tipo:"live",     orario:"",            note:"live music",                        stato:"ok"},
+  {d:23,name:"Amici e Buon Vino",     tipo:"community",orario:"12:00-20:00", note:"Coinvolgere Enotopia x produttore", stato:"ok"},
+  {d:24,name:"Segni Solchi",          tipo:"live",     orario:"",            note:"Roma vs Verona in serata",          stato:"ok"},
+  {d:28,name:"Evento artisti",        tipo:"altro",    orario:"",            note:"con Alex",                          stato:"ok"},
+  {d:31,name:"33 Giri Music",         tipo:"live",     orario:"",            note:"",                                  stato:"ok"}
+];
+var TIPO={
+  live:     {label:"Live Music",  bg:"#e8f4e8",col:"#1a5c1a",bdr:"#2d8a2d"},
+  sport:    {label:"Sport",       bg:"#e6f0fb",col:"#0c3d7c",bdr:"#2266cc"},
+  food:     {label:"Food & Drink",bg:"#fff4e0",col:"#7a4a00",bdr:"#e89a00"},
+  community:{label:"Community",   bg:"#f3eafe",col:"#4a1a8a",bdr:"#8833cc"},
+  altro:    {label:"Altro",       bg:"#f0f0f0",col:"#444",   bdr:"#999"}
+};
+var DAYS=["Domenica","Lunedi","Martedi","Mercoledi","Giovedi","Venerdi","Sabato"];
+var DOWS=["Lun","Mar","Mer","Gio","Ven","Sab","Dom"];
+function dow(d){return DAYS[new Date(2026,4,d).getDay()];}
+function sdow(d){return dow(d).substring(0,3);}
+
+function buildLista(){
+  var att=EVENTI.filter(function(e){return e.stato==="ok";}).length;
+  document.getElementById("ev-count").textContent=EVENTI.length+" eventi, "+att+" confermati";
+  var h="";
+  EVENTI.forEach(function(ev,i){
+    var t=TIPO[ev.tipo],sc=ev.stato!=="ok"?" "+ev.stato:"";
+    h+='<div class="lr'+sc+'" onclick="openScheda('+i+')">';
+    h+='<div class="lr-date"><div class="lr-day">'+ev.d+'</div><div class="lr-dow">'+sdow(ev.d)+'</div></div>';
+    h+='<div class="lr-body">';
+    h+='<div class="lr-title'+(ev.stato!=="ok"?" cancelled":"")+'" >'+ev.name+'</div>';
+    h+='<div class="lr-meta">';
+    h+='<span class="badge" style="background:'+t.bg+';color:'+t.col+'">'+t.label+'</span>';
+    if(ev.orario) h+='<span class="lr-note">'+ev.orario+'</span>';
+    if(ev.stato==="annullato") h+='<span class="stbadge sb-ann">Annullato</span>';
+    if(ev.stato==="rimandato") h+='<span class="stbadge sb-rim">Rimandato</span>';
+    h+='</div>';
+    if(ev.note) h+='<div class="lr-note">'+ev.note+'</div>';
+    h+='</div><div class="lr-arr">&#8250;</div></div>';
+  });
+  document.getElementById("lista-rows").innerHTML=h;
+  buildStats();
+}
+function buildStats(){
+  var c={live:0,sport:0,food:0,community:0,altro:0};
+  EVENTI.forEach(function(e){if(e.stato==="ok")c[e.tipo]++;});
+  document.getElementById("stats-row").innerHTML=
+    '<div class="stat"><div class="stat-n" style="color:#2d8a2d">'+c.live+'</div><div class="stat-l">Live</div></div>'+
+    '<div class="stat"><div class="stat-n" style="color:#2266cc">'+c.sport+'</div><div class="stat-l">Sport</div></div>'+
+    '<div class="stat"><div class="stat-n" style="color:#e89a00">'+c.food+'</div><div class="stat-l">Food</div></div>'+
+    '<div class="stat"><div class="stat-n" style="color:#8833cc">'+c.community+'</div><div class="stat-l">Community</div></div>'+
+    '<div class="stat"><div class="stat-n" style="color:#999">'+c.altro+'</div><div class="stat-l">Altro</div></div>';
+}
+function buildGrid(){
+  var h="";
+  DOWS.forEach(function(d){h+='<div class="dow">'+d+'</div>';});
+  for(var i=0;i<4;i++) h+='<div class="day empty"></div>';
+  for(var d=1;d<=31;d++){
+    var evs=EVENTI.filter(function(e){return e.d===d;});
+    h+='<div class="day'+(d===13?" today":"")+'"><div class="dn">'+d+'</div><div class="day-evs">';
+    evs.forEach(function(ev){
+      var t=TIPO[ev.tipo],idx=EVENTI.indexOf(ev),sc=ev.stato!=="ok"?" "+ev.stato:"";
+      h+='<div class="ep'+sc+'" style="background:'+t.bg+';color:'+t.col+';border-left-color:'+t.bdr+'" onclick="openScheda('+idx+')"><div class="ep-n">'+ev.name+'</div></div>';
+    });
+    h+='</div></div>';
+  }
+  for(var i=0;i<4;i++) h+='<div class="day empty"></div>';
+  document.getElementById("cal-grid").innerHTML=h;
+}
+function showTab(t){
+  document.getElementById("pane-lista").style.display=t==="lista"?"block":"none";
+  document.getElementById("pane-grid").style.display=t==="grid"?"block":"none";
+  document.getElementById("tab-lista").classList.toggle("active",t==="lista");
+  document.getElementById("tab-grid").classList.toggle("active",t==="grid");
+}
+function openModal(){document.getElementById("add-modal").classList.add("open");}
+function closeModal(){document.getElementById("add-modal").classList.remove("open");}
+function addEvent(){
+  var n=document.getElementById("new-name").value.trim();
+  var d=parseInt(document.getElementById("new-day").value);
+  if(!n||!d||d<1||d>31){alert("Inserisci nome e giorno.");return;}
+  EVENTI.push({d:d,name:n,tipo:document.getElementById("new-tipo").value,orario:document.getElementById("new-orario").value.trim(),note:document.getElementById("new-note").value.trim(),stato:"ok"});
+  EVENTI.sort(function(a,b){return a.d-b.d;});
+  buildLista();buildGrid();closeModal();
+  ["new-name","new-day","new-orario","new-note"].forEach(function(id){document.getElementById(id).value="";});
+}
+function openScheda(idx){
+  document.getElementById("scheda-body").innerHTML=buildScheda(EVENTI[idx],idx);
+  document.getElementById("view-cal").classList.remove("active");
+  document.getElementById("view-scheda").classList.add("active");
+  window.scrollTo(0,0);
+  var sn=document.getElementById("sn");
+  if(sn) sn.addEventListener("keydown",function(e){if(e.key==="Enter")addStaff();});
+  updateEco();
+}
+function goBack(){
+  document.getElementById("view-scheda").classList.remove("active");
+  document.getElementById("view-cal").classList.add("active");
+  buildLista();buildGrid();window.scrollTo(0,0);
+}
+function setStato(idx,s){
+  EVENTI[idx].stato=s;
+  var b=document.getElementById("stato-banner");
+  if(b){b.className="stato-banner "+(s!=="ok"?s:"");b.textContent=s==="annullato"?"Evento annullato":s==="rimandato"?"Evento rimandato / da riagendare":"";}
+  document.querySelectorAll(".stag").forEach(function(el,i){
+    var states=["ok","annullato","rimandato"],cls=["sok","sann","srim"];
+    el.className="stag"+(states[i]===s?" "+cls[i]:"");
+  });
+}
+function addStaff(){
+  var n=document.getElementById("sn").value.trim(),r=document.getElementById("sr").value;
+  if(!n) return;
+  var c=document.createElement("div");c.className="chip";
+  c.innerHTML='<span class="role">'+r+'</span> '+n+' <span class="x" onclick="this.parentElement.remove()">&#10005;</span>';
+  document.getElementById("chips").appendChild(c);
+  document.getElementById("sn").value="";
+}
+function toggleSiae(v){["si","no","tbd"].forEach(function(x){var el=document.getElementById("siae-"+x);if(el)el.classList.toggle("on",x===v);});}
+function toggleMenu(s){
+  var si=document.getElementById("mn-si"),no=document.getElementById("mn-no"),det=document.getElementById("mn-det");
+  if(si)si.classList.toggle("on",s);if(no)no.classList.toggle("on",!s);if(det)det.style.display=s?"block":"none";
+}
+function setStar(v){document.querySelectorAll(".star").forEach(function(s){s.classList.toggle("on",parseInt(s.dataset.v)<=v);});}
+function gv(id){var el=document.getElementById(id);return el?parseFloat(el.value)||0:0;}
+function fmt(n){return ""+n.toLocaleString("it-IT",{minimumFractionDigits:0,maximumFractionDigits:2});}
+function updateEco(){
+  var inc=gv("eco-inc");
+  var ids=["eco-cachet","eco-siae","eco-staff","eco-consumi","eco-perc","eco-adv"];
+  var tot=ids.reduce(function(s,id){return s+gv(id);},0);
+  document.querySelectorAll("[id^='eco-x-']").forEach(function(el){tot+=parseFloat(el.value)||0;});
+  var margin=inc-tot;
+  function sv(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
+  sv("r-inc",""+fmt(inc)+" EUR");sv("r-out",""+fmt(tot)+" EUR");sv("r-mg",""+fmt(margin)+" EUR");sv("eco-tot",""+fmt(tot)+" EUR");
+  var rb=document.getElementById("eco-result");
+  if(rb){rb.textContent=fmt(margin)+" EUR";rb.className="eco-result-val "+(margin>0?"pos":margin<0?"neg":"zero");}
+}
+var extraCount=0;
+function addSpesa(){
+  var name=document.getElementById("spesa-name").value.trim();
+  var amt=parseFloat(document.getElementById("spesa-amt").value)||0;
+  if(!name) return;
+  var id="eco-x-"+(++extraCount);
+  var row=document.createElement("div");row.className="eco-row";row.id="row-"+id;
+  row.innerHTML='<label>'+name+'</label><input type="number" inputmode="decimal" id="'+id+'" value="'+amt+'" oninput="updateEco()"/><span class="cur">EUR</span><span style="cursor:pointer;font-size:14px;color:var(--mid);margin-left:6px;padding:2px" onclick="removeSpesa(\''+id+'\')">&#10005;</span>';
+  document.getElementById("eco-extra").appendChild(row);
+  document.getElementById("spesa-name").value="";document.getElementById("spesa-amt").value="";
+  updateEco();
+}
+function removeSpesa(id){var r=document.getElementById("row-"+id);if(r)r.remove();updateEco();}
+
+function tags(list,active){
+  return list.map(function(l){return '<div class="tag'+(active.indexOf(l)>-1?" on":"")+'" onclick="this.classList.toggle(\'on\')">'+l+'</div>';}).join("");
+}
+
+function buildScheda(ev,idx){
+  var t=TIPO[ev.tipo],d=dow(ev.d);
+  var isEno=ev.name.indexOf("Buon Vino")>-1;
+  var isCom=ev.tipo==="community";
+  var siaeD=ev.tipo==="live"?"tbd":"no";
+  var musA=ev.tipo==="live"?["Live"]:ev.tipo==="community"?["Playlist"]:[];
+  var h="";
+  h+='<div class="sch-hd"><div><div class="sch-brand">LATTA<small>Fermenti e Miscele</small></div></div><div class="sch-lbl">Scheda Evento</div></div>';
+  h+='<div class="red-bar"></div>';
+  var bc=ev.stato!=="ok"?ev.stato:"",bt=ev.stato==="annullato"?"Evento annullato":ev.stato==="rimandato"?"Evento rimandato / da riagendare":"";
+  h+='<div class="stato-banner '+bc+'" id="stato-banner">'+bt+'</div>';
+  h+='<div class="nome-wrap"><div class="flabel">Nome evento</div><input class="fbig" value="'+ev.name+'"/></div>';
+  h+='<div class="gtop">';
+  h+='<div class="gcell"><div class="clbl">Data</div><div class="cval">'+d.substring(0,3)+' '+ev.d+' Maggio 2026</div></div>';
+  h+='<div class="gcell"><div class="clbl">Orario</div>'+(ev.orario?'<div class="cval">'+ev.orario+'</div>':'<input placeholder="es. 19:30 - 23:00"/>')+'</div>';
+  h+='<div class="gcell"><div class="clbl">Tipo</div><div class="tag-grp">'+tags(["Aperitivo","Cena","Brunch","Live","DJ Set","Sport","Community","Food","Private","Altro"],[t.label])+'</div></div>';
+  h+='</div>';
+  // stato
+  h+='<div class="sec"><div class="sec-t">Stato evento</div><div class="stato-row">';
+  h+='<div class="stag'+(ev.stato==="ok"?" sok":"")+'" onclick="setStato('+idx+',\'ok\')">Confermato</div>';
+  h+='<div class="stag'+(ev.stato==="annullato"?" sann":"")+'" onclick="setStato('+idx+',\'annullato\')">Annullato</div>';
+  h+='<div class="stag'+(ev.stato==="rimandato"?" srim":"")+'" onclick="setStato('+idx+',\'rimandato\')">Rimandato</div>';
+  h+='</div><div class="f" style="margin-top:10px"><label>Note stato</label><input placeholder="es. nuova data, motivazione annullo..."/></div></div>';
+  // staff
+  h+='<div class="sec"><div class="sec-t">Staff del giorno</div><div class="chips" id="chips"></div>';
+  h+='<div class="add-staff"><input id="sn" placeholder="Nome cognome..." autocomplete="off"/>';
+  h+='<select id="sr"><option>Sala</option><option>Bar</option><option>Cucina</option><option>Cassa</option><option>Floor Manager</option><option>Sicurezza</option><option>Extra</option></select>';
+  h+='<button onclick="addStaff()">+ Aggiungi</button></div></div>';
+  // funzionamento
+  var fnDef=isEno?"Evento community in fascia diurna estesa (12-20). Format conviviale sul vino naturale. Da coordinare con Enotopia per presenza produttore.":"";
+  h+='<div class="sec"><div class="sec-t">Funzionamento evento</div><div class="notebox"><textarea placeholder="Accoglienza, flusso ospiti, gestione spazi, turni tavoli...">'+fnDef+'</textarea></div></div>';
+  // musica
+  h+='<div class="sec"><div class="sec-t">Musica</div>';
+  h+='<div class="f"><label>Tipo</label><div class="tag-grp">'+tags(["Live","DJ Set","Playlist","Nessuna"],musA)+'</div></div>';
+  h+='<div class="g2">';
+  h+='<div class="f"><label>Artista / DJ</label><input placeholder="Nome artista o formazione..." autocomplete="off"/></div>';
+  h+='<div class="f"><label>Orario set</label><input placeholder="es. 21:00 - 23:30"/></div>';
+  h+='</div>';
+  h+='<div class="g3">';
+  h+='<div class="f"><label>Cachet (EUR)</label><input placeholder="-" inputmode="decimal"/></div>';
+  h+='<div class="f"><label>SIAE</label><div class="tag-grp" style="margin-top:4px"><div class="tag'+(siaeD==="si"?" on":"")+'" id="siae-si" onclick="toggleSiae(\'si\')">Si</div><div class="tag'+(siaeD==="no"?" on":"")+'" id="siae-no" onclick="toggleSiae(\'no\')">No</div><div class="tag'+(siaeD==="tbd"?" on":"")+'" id="siae-tbd" onclick="toggleSiae(\'tbd\')">Da definire</div></div></div>';
+  h+='<div class="f"><label>Accordo %</label><input placeholder="es. 10% oltre soglia" autocomplete="off"/></div>';
+  h+='</div></div>';
+  // servizio
+  h+='<div class="sec"><div class="sec-t">Modalita di servizio</div>';
+  h+='<div class="g3">';
+  h+='<div class="f"><label>Format</label><div class="tag-grp">'+tags(["Al tavolo","Buffet","Finger food","Open bar"],["Al tavolo"])+'</div></div>';
+  h+='<div class="f"><label>Prenotazione</label><div class="tag-grp">'+tags(["Obbligatoria","Consigliata","Walk-in"],isCom?["Consigliata"]:["Obbligatoria"])+'</div></div>';
+  h+='<div class="f"><label>Coperti previsti</label><input placeholder="da definire" inputmode="numeric"/></div>';
+  h+='</div>';
+  h+='<div class="f" style="margin-top:4px"><label>Note servizio</label><input placeholder="es. welcome drink, turni 90 min, VIC..." autocomplete="off"/></div></div>';
+  // menu
+  h+='<div class="sec"><div class="sec-t">Menu speciale</div>';
+  h+='<div class="f"><label>Menu dedicato</label><div style="display:flex;gap:8px;margin-top:6px"><div class="tag" id="mn-si" onclick="toggleMenu(true)">Si</div><div class="tag on" id="mn-no" onclick="toggleMenu(false)">No</div></div></div>';
+  h+='<div id="mn-det" style="display:none"><div class="menu-box"><textarea placeholder="Portate, drink abbinati, restrizioni alimentari, link documento..."></textarea></div></div>';
+  var dn=isEno?"Selezione vini naturali - coinvolgere Enotopia per proposta produttore":"";
+  h+='<div class="f" style="margin-top:10px"><label>Drink / abbinamenti consigliati</label><input value="'+dn+'" placeholder="es. cocktail signature, abbinamenti vino..." autocomplete="off"/></div></div>';
+  // comunicazione
+  h+='<div class="sec"><div class="sec-t">Comunicazione &amp; ADV</div>';
+  h+='<div style="border:1px solid var(--border);padding:0 12px;margin-bottom:10px">';
+  [{pl:"Instagram",ph:"Copy post, hashtag, data pubbl..."},{pl:"Facebook",ph:"Testo evento, link, boost..."},{pl:"Newsletter",ph:"Oggetto, lista, data invio..."},{pl:"WhatsApp",ph:"Lista broadcast, messaggio..."},{pl:"PR / Press",ph:"Media partner, giornalisti..."}]
+  .forEach(function(p,i){
+    h+='<div class="comm-pl"><div class="comm-pl-hd"><div class="comm-pl-name">'+p.pl+'</div><div class="comm-check"><input type="checkbox" id="cd'+i+'"><label for="cd'+i+'">Fatto</label></div></div><input class="comm-input" placeholder="'+p.ph+'" autocomplete="off"/></div>';
+  });
+  h+='</div>';
+  h+='<div class="g2"><div class="f"><label>Budget ADV (EUR)</label><input placeholder="0" inputmode="decimal"/></div><div class="f"><label>Grafiche / asset</label><input placeholder="Link drive, stato approvazioni..." autocomplete="off"/></div></div>';
+  h+='<div class="f" style="margin-top:4px"><label>Note comunicazione</label><input placeholder="Scadenze, approvazioni pendenti..." autocomplete="off"/></div></div>';
+  // note
+  h+='<div class="sec"><div class="sec-t">Note e attenzioni particolari</div>';
+  if(isEno) h+='<div class="alertbox">Coordinare con Enotopia per coinvolgere un produttore. Verificare disponibilita prima della comunicazione pubblica.</div>';
+  else if(ev.note) h+='<div class="alertbox">Dal programma: '+ev.note+'</div>';
+  h+='<div class="notebox"><textarea placeholder="Allergie VIC, attrezzature extra, timing critici, comunicazioni interne..."></textarea></div></div>';
+  // economico
+  h+='<div class="sec"><div class="sec-t">Economico <span class="sbadge">ex post</span></div>';
+  h+='<div style="background:var(--light);padding:12px 14px;border:1px solid var(--border);margin-bottom:14px">';
+  h+='<div class="flabel" style="margin-bottom:6px">Incasso lordo serata</div>';
+  h+='<div style="display:flex;align-items:baseline;gap:8px;margin-bottom:12px"><input class="eco-incasso" id="eco-inc" type="number" inputmode="decimal" placeholder="0" oninput="updateEco()"/><span style="font-family:\'Barlow Condensed\',sans-serif;font-size:14px;color:var(--mid)">EUR</span></div>';
+  h+='<div class="g3"><div class="f"><label>Coperti effettivi</label><input placeholder="0" inputmode="numeric"/></div><div class="f"><label>Scontrino medio</label><input placeholder="0" inputmode="decimal"/></div><div class="f"><label>Orario chiusura</label><input placeholder="es. 01:30"/></div></div>';
+  h+='</div>';
+  h+='<div class="eco-grid">';
+  h+='<div class="eco-card"><div class="eco-ctitle">Uscite</div>';
+  [{id:"eco-cachet",l:"Cachet artista / DJ"},{id:"eco-siae",l:"SIAE"},{id:"eco-staff",l:"Staff extra"},{id:"eco-consumi",l:"Consumi interni"},{id:"eco-perc",l:"% a organizzatore"},{id:"eco-adv",l:"ADV / comunicazione"}]
+  .forEach(function(r){h+='<div class="eco-row"><label>'+r.l+'</label><input type="number" inputmode="decimal" id="'+r.id+'" placeholder="0" oninput="updateEco()"/><span class="cur">EUR</span></div>';});
+  h+='<div id="eco-extra"></div>';
+  h+='<div class="eco-add-row"><input id="spesa-name" placeholder="Altra voce..." autocomplete="off"/><input id="spesa-amt" class="amt" type="number" inputmode="decimal" placeholder="0"/><button class="spesa-btn" onclick="addSpesa()">+</button></div>';
+  h+='<div class="eco-subtotal"><span class="eco-subtotal-lbl">Totale uscite</span><span class="eco-subtotal-val" id="eco-tot">0 EUR</span></div>';
+  h+='</div>';
+  h+='<div class="eco-card"><div class="eco-ctitle">Riepilogo</div>';
+  h+='<div class="eco-row"><label>Incasso lordo</label><span id="r-inc" style="font-family:\'Barlow Condensed\',sans-serif;font-size:14px;font-weight:700">0 EUR</span></div>';
+  h+='<div class="eco-row"><label>Totale uscite</label><span id="r-out" style="font-family:\'Barlow Condensed\',sans-serif;font-size:14px;font-weight:700;color:#a30000">0 EUR</span></div>';
+  h+='<div class="eco-subtotal"><span class="eco-subtotal-lbl">Margine netto</span><span class="eco-subtotal-val" id="r-mg">0 EUR</span></div>';
+  h+='</div>';
+  h+='</div>';
+  h+='<div class="eco-result"><span class="eco-result-lbl">Risultato evento</span><span class="eco-result-val zero" id="eco-result">0 EUR</span></div>';
+  h+='<div class="f" style="margin-top:12px"><label>Note economico</label><input placeholder="Pagamenti in sospeso, fatture da richiedere..." autocomplete="off"/></div>';
+  h+='</div>';
+  // debrief
+  h+='<div class="sec"><div class="sec-t">Debrief <span class="sbadge">post evento</span></div>';
+  h+='<div class="flabel" style="margin-bottom:8px">Valutazione complessiva</div>';
+  h+='<div class="stars">';
+  for(var s=1;s<=5;s++) h+='<span class="star" data-v="'+s+'" onclick="setStar('+s+')">&#9733;</span>';
+  h+='</div>';
+  h+='<div class="kpi-row">';
+  h+='<div class="kpi-box"><div class="kpi-lbl">Ospiti</div><input class="kpi-inp" placeholder="-" inputmode="numeric"/></div>';
+  h+='<div class="kpi-box"><div class="kpi-lbl">Atmosfera</div><div class="tag-grp" style="justify-content:center;margin-top:6px">'+tags(["Top","Ok","Bassa"],[])+'</div></div>';
+  h+='<div class="kpi-box"><div class="kpi-lbl">Rifare?</div><div class="tag-grp" style="justify-content:center;margin-top:6px">'+tags(["Si","Forse","No"],[])+'</div></div>';
+  h+='</div>';
+  h+='<div class="f"><label>Cosa ha funzionato</label><textarea placeholder="Punti di forza: servizio, risposta pubblico, sinergie..."></textarea></div>';
+  h+='<div class="f"><label>Cosa migliorare</label><textarea placeholder="Criticita: logistica, timing, comunicazione, staff..."></textarea></div>';
+  h+='<div class="f"><label>Azioni per la prossima volta</label><input placeholder="es. anticipare comunicazione, aggiungere coperti..." autocomplete="off"/></div>';
+  h+='</div>';
+  // referenti
+  h+='<div class="sec" style="border-bottom:none"><div class="sec-t">Referenti</div>';
+  h+='<div class="g2"><div class="f"><label>Referente interno</label><input placeholder="Nome e ruolo..." autocomplete="off"/></div>';
+  h+='<div class="f"><label>'+(isEno?"Contatto Enotopia":"Contatto organizzatore")+'</label><input placeholder="Nome, telefono, email..." autocomplete="off"/></div></div></div>';
+  // footer
+  h+='<div class="sch-ft"><div class="sf-txt">uso interno</div><div style="display:flex;align-items:center"><span class="sf-date">'+d.substring(0,3)+' '+ev.d+' Mag 2026</span><button class="print-btn" onclick="window.print()">Stampa</button></div></div>';
+  return h;
+}
+buildLista();
+buildGrid();
+</script>
+</body>
+</html>
